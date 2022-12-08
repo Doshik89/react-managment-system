@@ -1,0 +1,12 @@
+.side-menu .nav-link {
+	color: #fff5ee;
+	font-weight: 500;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	transition: 0.3s ease;
+}
+.side-menu .nav-link:hover {
+	color: #fff5ee;
+	background: #00508d;
+	cursor: pointer;
+}
