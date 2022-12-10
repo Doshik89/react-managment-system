@@ -7,6 +7,7 @@ import SideMenu from '../components/side-menu/side-menu';
 import MainTitle from '../components/main-title/main-title';
 import Register from '../components/register/register';
 import RepairEquip from '../pages/repairEquip';
+import RepairApplication from '../pages/repairApplication';
 const { Content } = Layout;
 
 function App() {
@@ -32,6 +33,7 @@ function ContentRoute() {
 				<Route path="/" element={<MainTitle />}></Route>
 				<Route path="/home" element={<MainTitle />}></Route>
 				<Route path="/repair_app" element={<RepairEquip />}></Route>
+				<Route path="/repair_equip" element={<RepairApplication />}></Route>
 				<Route path="/register" element={<Register />}></Route>
 			</Routes>
 		</div>

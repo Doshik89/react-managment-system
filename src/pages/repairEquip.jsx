@@ -12,7 +12,7 @@ const RepairEquip = () => {
 			dateGet: '12 April',
 			dateTake: '13 April',
 			status: 'Accepted',
-			notes: 'Alan Gay',
+			notes: 'Не работает клавиатура',
 		},
 		{
 			id: 2,
@@ -21,7 +21,7 @@ const RepairEquip = () => {
 			dateGet: '15 April',
 			dateTake: '20 April',
 			status: 'In Progress',
-			notes: 'Alih Gay',
+			notes: 'Проблемы с монитором',
 		},
 		{
 			id: 3,
@@ -30,7 +30,7 @@ const RepairEquip = () => {
 			dateGet: '20 April',
 			dateTake: '23 April',
 			status: 'Done',
-			notes: 'Nurik Gay',
+			notes: 'Не работает мышь',
 		},
 	]);
 	const [editRowKey, setEditRowKey] = useState('');
@@ -80,7 +80,7 @@ const RepairEquip = () => {
 			align: 'center',
 		},
 		{
-			title: 'Item Id',
+			title: 'Cотрудник',
 			dataIndex: 'itemId',
 			align: 'center',
 		},
@@ -90,17 +90,17 @@ const RepairEquip = () => {
 			align: 'center',
 		},
 		{
-			title: 'dateGet',
+			title: 'Дата регистрации',
 			dataIndex: 'dateGet',
 			align: 'center',
 		},
 		{
-			title: 'dateTake',
+			title: 'Дата принятия',
 			dataIndex: 'dateTake',
 			align: 'center',
 		},
 		{
-			title: 'Status',
+			title: 'Статус',
 			dataIndex: 'status',
 			editTable: true,
 			align: 'center',
@@ -120,7 +120,7 @@ const RepairEquip = () => {
 			},
 		},
 		{
-			title: 'Notes',
+			title: 'Содержание',
 			dataIndex: 'notes',
 			editTable: true,
 			align: 'center',
@@ -222,11 +222,14 @@ const RepairEquip = () => {
 	return (
 		<div>
 			<Space
-				className="d-flex justify-content-center"
-				style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
+				className="d-flex justify-content-between"
+				style={{ marginBottom: 20 }}
 			>
+				<h1 style={{ marginLeft: 20, marginTop: 30 }}>Заявки на ремонт</h1>
 				<Button
 					style={{
+						marginTop: 15,
+						marginRight: 30,
 						backgroundColor: '#c2115e',
 						color: '#fff',
 						width: 150,
@@ -236,6 +239,11 @@ const RepairEquip = () => {
 					<CSVLink data={gridData}>Export</CSVLink>
 				</Button>
 			</Space>
+
+			<Space
+				className="d-flex justify-content-center"
+				style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
+			></Space>
 			<Form form={form} component={false}>
 				<Table
 					dataSource={gridData}
