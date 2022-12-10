@@ -8,6 +8,9 @@ import MainTitle from '../components/main-title/main-title';
 import Register from '../components/register/register';
 import RepairEquip from '../pages/repairEquip';
 import RepairApplication from '../pages/repairApplication';
+import CatalogEquip from '../pages/catalogEquip';
+import CompEquip from '../pages/compEquip';
+
 const { Content } = Layout;
 
 function App() {
@@ -34,6 +37,9 @@ function ContentRoute() {
 				<Route path="/home" element={<MainTitle />}></Route>
 				<Route path="/repair_app" element={<RepairEquip />}></Route>
 				<Route path="/repair_equip" element={<RepairApplication />}></Route>
+				<Route path="/catalog_equip" element={<CatalogEquip />}></Route>
+				<Route path="/comp_equip" element={<CompEquip />}></Route>
+
 				<Route path="/register" element={<Register />}></Route>
 			</Routes>
 		</div>

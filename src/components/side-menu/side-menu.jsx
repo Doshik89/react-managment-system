@@ -46,9 +46,14 @@ const SideMenu = () => {
 					},
 					{
 						label: 'Каталог названий оборудования',
+						key: '/catalog_equip',
 						icon: <ContainerOutlined />,
 					},
-					{ label: 'Компьютерная техника', icon: <DesktopOutlined /> },
+					{
+						label: 'Компьютерная техника',
+						key: '/comp_equip',
+						icon: <DesktopOutlined />,
+					},
 					{ label: 'Оборудование на рабочем месте', icon: <LaptopOutlined /> },
 					{ label: 'Элементы компьтерной техники', icon: <BlockOutlined /> },
 					{ label: 'Каталог рабочих мест', icon: <MenuOutlined /> },
