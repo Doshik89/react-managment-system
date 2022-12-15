@@ -1,22 +1,23 @@
 .navbar-nav .nav-link {
-	color: #000 !important;
-	font-weight: bold;
+  color: #000 !important;
+  font-weight: bold;
 }
 
 .navbar {
-	background: #fff;
+  background: #fff;
 }
 
 .navbar-shadow {
-	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-		rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .navbar-brand img {
-	width: 250px;
-	height: 55px;
+  width: 250px;
+  height: 50px;
+  margin-top: 5px;
 }
 
 .btn {
-	margin-right: 20px;
+  margin-right: 20px;
 }
