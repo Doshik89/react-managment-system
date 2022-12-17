@@ -10,6 +10,11 @@ import RepairEquip from '../pages/repairEquip';
 import RepairApplication from '../pages/repairApplication';
 import CatalogEquip from '../pages/catalogEquip';
 import CompEquip from '../pages/compEquip';
+import CompElements from '../pages/compElements';
+import CatalogWorkplaces from '../pages/catalogWorkplaces';
+import Employees from '../pages/Employees';
+import Positions from '../pages/Positions';
+import WorkplaceEquip from '../pages/workplaceEquip';
 
 const { Content } = Layout;
 
@@ -38,7 +43,15 @@ function ContentRoute() {
 				<Route path="/repair_app" element={<RepairEquip />}></Route>
 				<Route path="/repair_equip" element={<RepairApplication />}></Route>
 				<Route path="/catalog_equip" element={<CatalogEquip />}></Route>
-				<Route path="/comp_equip" element={<CompEquip />}></Route>
+				<Route path="/computer_equip" element={<CompEquip />}></Route>
+				<Route path="/workplace_equip" element={<WorkplaceEquip />}></Route>
+				<Route path="/computer_elements" element={<CompElements />}></Route>
+				<Route
+					path="/catalog_workplace"
+					element={<CatalogWorkplaces />}
+				></Route>
+				<Route path="/employees" element={<Employees />}></Route>
+				<Route path="/positions" element={<Positions />}></Route>
 
 				<Route path="/register" element={<Register />}></Route>
 			</Routes>
