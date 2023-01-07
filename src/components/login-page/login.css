@@ -15,7 +15,8 @@
 
 .row {
   background: #fff;
-  border-radius: 15px;
+  border-radius: 16px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .leftSide {
   display: flex;
@@ -29,7 +30,7 @@
     rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
   backdrop-filter: blur(2px);
   padding: 50px;
-  border-radius: 16px;
+  border-radius: 15px;
 }
 
 .logTitle {
