@@ -1,0 +1,47 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: #2148c0;
+}
+
+.row {
+  background: #fff;
+  border-radius: 15px;
+}
+.leftSide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginForm {
+  background-color: rgb(255, 255, 255, 0.33);
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
+    rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
+  backdrop-filter: blur(2px);
+  padding: 50px;
+  border-radius: 16px;
+}
+
+.logTitle {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+img {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+Button {
+  margin-top: 20px;
+}

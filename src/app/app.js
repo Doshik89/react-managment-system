@@ -15,48 +15,51 @@ import CatalogWorkplaces from '../pages/catalogWorkplaces';
 import Employees from '../pages/Employees';
 import Positions from '../pages/Positions';
 import WorkplaceEquip from '../pages/workplaceEquip';
+import Login from '../components/login-page/login';
 
 const { Content } = Layout;
 
 function App() {
-	return (
-		<Layout style={{ minHeight: '100vh' }}>
-			<Navbar />
-			<Layout>
-				<SideMenu />
-				<Layout>
-					<Content className="site-layout-background">
-						<ContentRoute />
-					</Content>
-				</Layout>
-			</Layout>
-		</Layout>
-	);
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      {/* <Navbar /> */}
+      <Login />
+      <Layout>
+        {/* <SideMenu /> */}
+        <Layout>
+          <Content className="site-layout-background">
+            <ContentRoute />
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
+  );
 }
 
 function ContentRoute() {
-	return (
-		<div>
-			<Routes>
-				<Route path="/" element={<MainTitle />}></Route>
-				<Route path="/home" element={<MainTitle />}></Route>
-				<Route path="/repair_app" element={<RepairEquip />}></Route>
-				<Route path="/repair_equip" element={<RepairApplication />}></Route>
-				<Route path="/catalog_equip" element={<CatalogEquip />}></Route>
-				<Route path="/computer_equip" element={<CompEquip />}></Route>
-				<Route path="/workplace_equip" element={<WorkplaceEquip />}></Route>
-				<Route path="/computer_elements" element={<CompElements />}></Route>
-				<Route
-					path="/catalog_workplace"
-					element={<CatalogWorkplaces />}
-				></Route>
-				<Route path="/employees" element={<Employees />}></Route>
-				<Route path="/positions" element={<Positions />}></Route>
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<MainTitle />}></Route>
+        {/* <Route path="/login" element={<Login />}></Route> */}
+        <Route path="/home" element={<MainTitle />}></Route>
+        <Route path="/repair_app" element={<RepairEquip />}></Route>
+        <Route path="/repair_equip" element={<RepairApplication />}></Route>
+        <Route path="/catalog_equip" element={<CatalogEquip />}></Route>
+        <Route path="/computer_equip" element={<CompEquip />}></Route>
+        <Route path="/workplace_equip" element={<WorkplaceEquip />}></Route>
+        <Route path="/computer_elements" element={<CompElements />}></Route>
+        <Route
+          path="/catalog_workplace"
+          element={<CatalogWorkplaces />}
+        ></Route>
+        <Route path="/employees" element={<Employees />}></Route>
+        <Route path="/positions" element={<Positions />}></Route>
 
-				<Route path="/register" element={<Register />}></Route>
-			</Routes>
-		</div>
-	);
+        <Route path="/register" element={<Register />}></Route>
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
