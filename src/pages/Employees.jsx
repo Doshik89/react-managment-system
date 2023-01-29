@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { Table, Popconfirm, Button, Space, Form, Input } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
+import Navbar from '../components/AppNavbar/navbar';
+import SideMenu from '../components/SideMenu/side-menu';
+import { Layout } from 'antd';
+
+const { Content } = Layout;
 
 const Employees = () => {
   const [gridData, setGridData] = useState([
@@ -360,43 +365,53 @@ const Employees = () => {
   };
 
   return (
-    <div>
-      <Space
-        className="d-flex justify-content-between"
-        style={{ marginBottom: 20 }}
-      >
-        <h1 style={{ marginLeft: 20, marginTop: 30 }}>Сотрудники</h1>
-        <Button
-          style={{
-            marginTop: 15,
-            marginRight: 30,
-            backgroundColor: '#c2115e',
-            color: '#fff',
-            width: 150,
-            height: 40,
-          }}
-        >
-          <CSVLink data={gridData}>Export</CSVLink>
-        </Button>
-      </Space>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Navbar />
+      <Layout>
+        <SideMenu />
+        <Layout>
+          <Content className="site-layout-background">
+            <div>
+              <Space
+                className="d-flex justify-content-between"
+                style={{ marginBottom: 20 }}
+              >
+                <h1 style={{ marginLeft: 20, marginTop: 30 }}>Сотрудники</h1>
+                <Button
+                  style={{
+                    marginTop: 15,
+                    marginRight: 30,
+                    backgroundColor: '#c2115e',
+                    color: '#fff',
+                    width: 150,
+                    height: 40,
+                  }}
+                >
+                  <CSVLink data={gridData}>Export</CSVLink>
+                </Button>
+              </Space>
 
-      <Space
-        className="d-flex justify-content-center"
-        style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
-      ></Space>
-      <Form form={form} component={false}>
-        <Table
-          dataSource={gridData}
-          columns={mergedColumns}
-          bordered
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-        />
-      </Form>
-    </div>
+              <Space
+                className="d-flex justify-content-center"
+                style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
+              ></Space>
+              <Form form={form} component={false}>
+                <Table
+                  dataSource={gridData}
+                  columns={mergedColumns}
+                  bordered
+                  components={{
+                    body: {
+                      cell: EditableCell,
+                    },
+                  }}
+                />
+              </Form>
+            </div>
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   );
 };
 

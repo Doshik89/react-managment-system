@@ -7,11 +7,7 @@ import {
   TeamOutlined,
   UserAddOutlined,
   UserOutlined,
-  MenuOutlined,
   FormOutlined,
-  DatabaseOutlined,
-  ContainerOutlined,
-  BlockOutlined,
   LaptopOutlined,
 } from '@ant-design/icons';
 const { Sider } = Layout;
@@ -40,16 +36,6 @@ const SideMenu = () => {
             icon: <FormOutlined />,
           },
           {
-            label: 'Оборудование в ремонте',
-            key: '/repair_equip',
-            icon: <DatabaseOutlined />,
-          },
-          {
-            label: 'Каталог названий оборудования',
-            key: '/catalog_equip',
-            icon: <ContainerOutlined />,
-          },
-          {
             label: 'Компьютерная техника',
             key: '/computer_equip',
             icon: <DesktopOutlined />,
@@ -58,16 +44,6 @@ const SideMenu = () => {
             label: 'Оборудование на рабочем месте',
             key: '/workplace_equip',
             icon: <LaptopOutlined />,
-          },
-          {
-            label: 'Элементы компьтерной техники',
-            key: '/computer_elements',
-            icon: <BlockOutlined />,
-          },
-          {
-            label: 'Каталог рабочих мест',
-            key: '/catalog_workplace',
-            icon: <MenuOutlined />,
           },
           { label: 'Сотрудники', key: '/employees', icon: <TeamOutlined /> },
           { label: 'Должности', key: '/positions', icon: <UserOutlined /> },
