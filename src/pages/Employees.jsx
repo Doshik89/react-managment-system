@@ -24,181 +24,6 @@ const Employees = () => {
       empName: 'Алихан',
       empLastname: 'А',
     },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
-    {
-      id: 1,
-      empWorkId: 1,
-      empSurname: 'Курмангали',
-      empName: 'Санжар',
-      empLastname: 'С',
-    },
-    {
-      id: 2,
-      empWorkId: 2,
-      empSurname: 'Асанулы',
-      empName: 'Алихан',
-      empLastname: 'А',
-    },
-    {
-      id: 3,
-      empWorkId: 3,
-      empSurname: 'Маликов',
-      empName: 'Алан',
-      empLastname: 'А',
-    },
   ]);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
@@ -377,18 +202,32 @@ const Employees = () => {
                 style={{ marginBottom: 20 }}
               >
                 <h1 style={{ marginLeft: 20, marginTop: 30 }}>Сотрудники</h1>
-                <Button
-                  style={{
-                    marginTop: 15,
-                    marginRight: 30,
-                    backgroundColor: '#c2115e',
-                    color: '#fff',
-                    width: 150,
-                    height: 40,
-                  }}
-                >
-                  <CSVLink data={gridData}>Export</CSVLink>
-                </Button>
+                <Space>
+                  <Button
+                    style={{
+                      marginTop: 15,
+                      backgroundColor: '#c2115e',
+                      color: '#fff',
+                      width: 150,
+                      height: 40,
+                    }}
+                  >
+                    Add New
+                  </Button>
+                  <Button
+                    style={{
+                      marginTop: 15,
+                      marginLeft: 10,
+                      marginRight: 30,
+                      backgroundColor: '#c2115e',
+                      color: '#fff',
+                      width: 150,
+                      height: 40,
+                    }}
+                  >
+                    <CSVLink data={gridData}>Export</CSVLink>
+                  </Button>
+                </Space>
               </Space>
 
               <Space

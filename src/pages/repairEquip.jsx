@@ -237,20 +237,34 @@ const RepairEquip = () => {
                 style={{ marginBottom: 20 }}
               >
                 <h1 style={{ marginLeft: 20, marginTop: 30 }}>
-                  Компьютерная техника
+                  Заявки на ремонт
                 </h1>
-                <Button
-                  style={{
-                    marginTop: 15,
-                    marginRight: 30,
-                    backgroundColor: '#c2115e',
-                    color: '#fff',
-                    width: 150,
-                    height: 40,
-                  }}
-                >
-                  <CSVLink data={gridData}>Export</CSVLink>
-                </Button>
+                <Space>
+                  <Button
+                    style={{
+                      marginTop: 15,
+                      backgroundColor: '#c2115e',
+                      color: '#fff',
+                      width: 150,
+                      height: 40,
+                    }}
+                  >
+                    Add New
+                  </Button>
+                  <Button
+                    style={{
+                      marginTop: 15,
+                      marginLeft: 10,
+                      marginRight: 30,
+                      backgroundColor: '#c2115e',
+                      color: '#fff',
+                      width: 150,
+                      height: 40,
+                    }}
+                  >
+                    <CSVLink data={gridData}>Export</CSVLink>
+                  </Button>
+                </Space>
               </Space>
 
               <Space

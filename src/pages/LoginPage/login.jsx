@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Typography, Button } from 'antd';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import teamImg from '../../resources/img/logBG.png';
 import './login.css';
@@ -21,8 +21,6 @@ const login = async values => {
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const fromPage = location.state?.from?.pathname || '/';
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -79,6 +77,7 @@ const Login = () => {
                   type="primary"
                   htmlType="submit"
                   size="large"
+                  style={{ marginTop: '20px' }}
                 >
                   Sign In
                 </Button>
