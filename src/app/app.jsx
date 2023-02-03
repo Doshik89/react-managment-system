@@ -1,6 +1,6 @@
 import './app.css';
 import React from 'react';
-import { Routes, Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import MainTitle from '../pages/Dashboard/dashboard';
 import Register from '../pages/Register/register';
 import RepairEquip from '../pages/repairEquip';
