@@ -12,6 +12,10 @@ const Navbar = () => {
     navigate('/login', { replace: true });
   };
 
+  const login = () => {
+    navigate('/login', { replace: true });
+  };
+
   return (
     <div className="navbar navbar-dark sticky-top flex-md-nowrap p-0 navbar-shadow">
       <a className="navbar-brand col-md-3 col-lg-2 me-0 px-1" href="/">
@@ -20,6 +24,7 @@ const Navbar = () => {
       <div className="navbar-nav">
         <div className="d-flex align-items-center btn-outline">
           <Button
+            onClick={login}
             className="nav-link px-3 btn"
             type="primary"
             style={{ background: 'white' }}
