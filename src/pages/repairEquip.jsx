@@ -1,51 +1,66 @@
-import { useState } from 'react';
-import { Table, Popconfirm, Button, Space, Form, Input, Tag } from 'antd';
+import { useState, useEffect } from 'react';
+import {
+  Table,
+  Popconfirm,
+  Button,
+  Space,
+  Form,
+  Input,
+  Tag,
+  message,
+} from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import Navbar from '../components/AppNavbar/navbar';
 import SideMenu from '../components/SideMenu/side-menu';
 import { Layout } from 'antd';
+import axios from 'axios';
+import Spinner from '../components/Spinner/Spinner';
 
 const { Content } = Layout;
 
-const RepairEquip = () => {
-  const [gridData, setGridData] = useState([
-    {
-      id: 1,
-      itemId: 1,
-      inventNumber: 1,
-      dateGet: '12 April',
-      dateTake: '13 April',
-      status: 'Accepted',
-      notes: 'Не работает клавиатура',
-    },
-    {
-      id: 2,
-      itemId: 2,
-      inventNumber: 2,
-      dateGet: '15 April',
-      dateTake: '20 April',
-      status: 'In Progress',
-      notes: 'Проблемы с монитором',
-    },
-    {
-      id: 3,
-      itemId: 3,
-      inventNumber: 3,
-      dateGet: '20 April',
-      dateTake: '23 April',
-      status: 'Done',
-      notes: 'Не работает мышь',
-    },
-  ]);
+function RepairEquip() {
+  const [dataSource, setDataSource] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
 
-  const handleDelete = value => {
-    let newContact = [...gridData].filter(item => item.id !== value.id);
-    setGridData(newContact);
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setLoading(true);
+    axios
+      .get('https://autovaq.herokuapp.com/api/request/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        mode: 'no-cors',
+      })
+      .then(res => {
+        setDataSource(res.data.sort((a, b) => a.id - b.id));
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
 
+  const handleDelete = value => {
+    const token = localStorage.getItem('token');
+    axios
+      .delete(`https://autovaq.herokuapp.com/api/position/${value.id}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      })
+      .then(res => {
+        let newContact = [...dataSource].filter(item => item.id !== value.id);
+        setDataSource(newContact);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   const isEditing = record => {
     return record.id === editRowKey;
   };
@@ -53,16 +68,36 @@ const RepairEquip = () => {
   const cancel = () => {
     setEditRowKey('');
   };
+
   const save = async id => {
     try {
       const row = await form.validateFields();
-      const newData = [...gridData];
+      const newData = [...dataSource];
       const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setGridData(newData);
-        setEditRowKey('');
+        const token = localStorage.getItem('token');
+        axios
+          .put(
+            `https://autovaq.herokuapp.com/api/position/${item.id}/`,
+            {
+              ...row,
+            },
+            {
+              headers: {
+                Authorization: `Token ${token}`,
+              },
+            }
+          )
+          .then(res => {
+            newData.splice(index, 1, { ...item, ...row });
+            setDataSource(newData);
+            setEditRowKey('');
+            message.success('Changes saved successfully');
+          })
+          .catch(err => {
+            message.error(err);
+          });
       }
     } catch (error) {
       console.log('Error', error);
@@ -71,8 +106,7 @@ const RepairEquip = () => {
 
   const edit = record => {
     form.setFieldsValue({
-      status: '',
-      notes: '',
+      pos: '',
       ...record,
     });
     setEditRowKey(record.id);
@@ -80,39 +114,46 @@ const RepairEquip = () => {
 
   const columns = [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      align: 'center',
+      title: 'ID сотрудника',
+      dataIndex: 'emp_id',
+      key: 'emp_id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Cотрудник',
-      dataIndex: 'itemId',
-      align: 'center',
-    },
-    {
-      title: 'Инвент. номер',
-      dataIndex: 'inventNumber',
-      align: 'center',
+      title: 'ID оборудование',
+      dataIndex: 'computer',
+      key: 'computer',
     },
     {
       title: 'Дата регистрации',
-      dataIndex: 'dateGet',
-      align: 'center',
+      dataIndex: 'reg_date',
+      key: 'reg_date',
     },
     {
       title: 'Дата принятия',
-      dataIndex: 'dateTake',
-      align: 'center',
+      dataIndex: 'req_acc_date',
+      key: 'req_acc_date',
     },
     {
-      title: 'Статус',
-      dataIndex: 'status',
+      title: 'Дата выполнения',
+      dataIndex: 'req_cmp_date',
+      key: 'req_cmp_date',
+    },
+    {
+      title: 'Содержание',
+      dataIndex: 'req_desc',
+      key: 'req_desc',
+    },
+    {
+      title: 'Состояние',
+      dataIndex: 'req_status',
+      key: 'req_status',
       editTable: true,
       align: 'center',
       render: tag => {
         const color = tag.includes('Accepted')
           ? 'Blue'
-          : tag.includes('In Progress')
+          : tag.includes('On Workplace')
           ? 'Orange'
           : tag.includes('Done')
           ? 'Green'
@@ -125,20 +166,15 @@ const RepairEquip = () => {
       },
     },
     {
-      title: 'Заметки',
-      dataIndex: 'notes',
-      editTable: true,
-      align: 'center',
-    },
-    {
       title: 'Action',
       dataIndex: 'action',
+      key: 'action',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
 
-        return gridData.length >= 1 ? (
-          <Space>
+        return dataSource.length >= 1 ? (
+          <Space key={record.id}>
             <Popconfirm
               title="Are you sure want to delete?"
               onConfirm={() => handleDelete(record)}
@@ -262,7 +298,7 @@ const RepairEquip = () => {
                       height: 40,
                     }}
                   >
-                    <CSVLink data={gridData}>Export</CSVLink>
+                    <CSVLink data={dataSource}>Export</CSVLink>
                   </Button>
                 </Space>
               </Space>
@@ -272,16 +308,21 @@ const RepairEquip = () => {
                 style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
               ></Space>
               <Form form={form} component={false}>
-                <Table
-                  dataSource={gridData}
-                  columns={mergedColumns}
-                  bordered
-                  components={{
-                    body: {
-                      cell: EditableCell,
-                    },
-                  }}
-                />
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <Table
+                    loading={loading}
+                    dataSource={dataSource}
+                    columns={mergedColumns}
+                    bordered
+                    components={{
+                      body: {
+                        cell: EditableCell,
+                      },
+                    }}
+                  />
+                )}
               </Form>
             </div>
           </Content>
@@ -289,6 +330,6 @@ const RepairEquip = () => {
       </Layout>
     </Layout>
   );
-};
+}
 
 export default RepairEquip;

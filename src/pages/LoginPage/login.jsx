@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Typography, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Typography, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import teamImg from '../../resources/img/logBG.png';
@@ -22,20 +22,18 @@ const login = async values => {
 const Login = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) navigate('/');
-  }, [navigate]);
-
   const [formError, setFormError] = useState(null);
 
   const handleSubmit = async values => {
-    const { success, token, message } = await login(values);
-    if (success) {
+    const { token, message: errorMessage } = await login(values);
+    if (token) {
       localStorage.setItem('token', token);
       navigate('/');
     } else {
-      setFormError(message);
+      message.error(
+        'Authorization failed. Please enter correct username and password.'
+      );
+      setFormError(errorMessage);
     }
   };
 

@@ -1,11 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Table, Popconfirm, Button, Space, Form, Input, Tag } from 'antd';
+import {
+  Table,
+  Popconfirm,
+  Button,
+  Space,
+  Form,
+  Input,
+  Tag,
+  message,
+} from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import Navbar from '../components/AppNavbar/navbar';
 import SideMenu from '../components/SideMenu/side-menu';
 import { Layout } from 'antd';
 import axios from 'axios';
+import Spinner from '../components/Spinner/Spinner';
 
 const { Content } = Layout;
 
@@ -26,7 +36,7 @@ function СompEquip() {
         mode: 'no-cors',
       })
       .then(res => {
-        setDataSource(res.data);
+        setDataSource(res.data.sort((a, b) => a.id - b.id));
         setLoading(false);
       })
       .catch(err => {
@@ -36,8 +46,20 @@ function СompEquip() {
   }, []);
 
   const handleDelete = value => {
-    let newContact = [...dataSource].filter(item => item.id !== value.id);
-    setDataSource(newContact);
+    const token = localStorage.getItem('token');
+    axios
+      .delete(`https://autovaq.herokuapp.com/api/position/${value.id}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      })
+      .then(res => {
+        let newContact = [...dataSource].filter(item => item.id !== value.id);
+        setDataSource(newContact);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   const isEditing = record => {
@@ -47,6 +69,7 @@ function СompEquip() {
   const cancel = () => {
     setEditRowKey('');
   };
+
   const save = async id => {
     try {
       const row = await form.validateFields();
@@ -54,9 +77,28 @@ function СompEquip() {
       const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setDataSource(newData);
-        setEditRowKey('');
+        const token = localStorage.getItem('token');
+        axios
+          .put(
+            `https://autovaq.herokuapp.com/api/position/${item.id}/`,
+            {
+              ...row,
+            },
+            {
+              headers: {
+                Authorization: `Token ${token}`,
+              },
+            }
+          )
+          .then(res => {
+            newData.splice(index, 1, { ...item, ...row });
+            setDataSource(newData);
+            setEditRowKey('');
+            message.success('Changes saved successfully');
+          })
+          .catch(err => {
+            message.error(err);
+          });
       }
     } catch (error) {
       console.log('Error', error);
@@ -75,30 +117,38 @@ function СompEquip() {
     {
       title: 'Id',
       dataIndex: 'id',
+      key: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Владелец',
       dataIndex: 'owner',
+      key: 'owner',
     },
     {
       title: 'Название оборудование',
       dataIndex: 'device_name',
+      key: 'device_name',
     },
     {
       title: 'Дата прибытия',
       dataIndex: 'arrival_date',
+      key: 'arrival_date',
     },
     {
       title: 'Дата удаления',
       dataIndex: 'deletion_date',
+      key: 'deletion_date',
     },
     {
       title: 'Заметки',
       dataIndex: 'notes',
+      key: 'notes',
     },
     {
       title: 'Состояние',
       dataIndex: 'condition',
+      key: 'condition',
       editTable: true,
       align: 'center',
       render: tag => {
@@ -119,12 +169,13 @@ function СompEquip() {
     {
       title: 'Action',
       dataIndex: 'action',
+      key: 'id',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
 
         return dataSource.length >= 1 ? (
-          <Space>
+          <Space key={record.id}>
             <Popconfirm
               title="Are you sure want to delete?"
               onConfirm={() => handleDelete(record)}
@@ -259,7 +310,7 @@ function СompEquip() {
               ></Space>
               <Form form={form} component={false}>
                 {loading ? (
-                  <p>Loading...</p>
+                  <Spinner />
                 ) : (
                   <Table
                     loading={loading}

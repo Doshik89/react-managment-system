@@ -5,6 +5,7 @@
 
 .navbar {
   background: #fff;
+  z-index: 5;
 }
 
 .navbar-shadow {

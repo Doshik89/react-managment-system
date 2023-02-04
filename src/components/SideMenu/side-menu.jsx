@@ -8,7 +8,6 @@ import {
   UserAddOutlined,
   UserOutlined,
   FormOutlined,
-  LaptopOutlined,
 } from '@ant-design/icons';
 const { Sider } = Layout;
 
@@ -39,11 +38,6 @@ const SideMenu = () => {
             label: 'Компьютерная техника',
             key: '/computer_equip',
             icon: <DesktopOutlined />,
-          },
-          {
-            label: 'Оборудование на рабочем месте',
-            key: '/workplace_equip',
-            icon: <LaptopOutlined />,
           },
           { label: 'Сотрудники', key: '/employees', icon: <TeamOutlined /> },
           { label: 'Должности', key: '/positions', icon: <UserOutlined /> },

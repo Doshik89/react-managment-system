@@ -3,8 +3,20 @@ import { Form, Button, Input, Select } from 'antd';
 import Navbar from '../../components/AppNavbar/navbar';
 import SideMenu from '../../components/SideMenu/side-menu';
 import { Layout } from 'antd';
+import axios from 'axios';
 
 const { Content } = Layout;
+
+const onFinish = values => {
+  axios
+    .post('https://autovaq.herokuapp.com/register/', values)
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
 
 function Register() {
   return (
@@ -20,9 +32,7 @@ function Register() {
                   autoComplete="off"
                   labelCol={{ span: 11 }}
                   wrapperCol={{ span: 20 }}
-                  onFinish={values => {
-                    console.log({ values });
-                  }}
+                  onFinish={onFinish}
                   onFinishFailed={error => {
                     console.log({ error });
                   }}
@@ -37,7 +47,22 @@ function Register() {
                     Create Account
                   </h1>
                   <Form.Item
-                    name="name"
+                    name="username"
+                    label="Ник сотрудника"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Пожалуйста, введите ник сотрудника',
+                      },
+                      { whitespace: true },
+                      { min: 3 },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input placeholder="Введите имя" />
+                  </Form.Item>
+                  <Form.Item
+                    name="first_name"
                     label="Имя сотрудника"
                     rules={[
                       {
@@ -52,7 +77,7 @@ function Register() {
                     <Input placeholder="Введите имя" />
                   </Form.Item>
                   <Form.Item
-                    name="lastName"
+                    name="last_name"
                     label="Фамилия сотрудника"
                     rules={[
                       {
@@ -67,23 +92,6 @@ function Register() {
                     <Input placeholder="Введите фамилию" />
                   </Form.Item>
                   <Form.Item
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Пожалуйста, введите email сотрудника',
-                      },
-                      {
-                        type: 'email',
-                        message: 'Пожалуйста, введите действительный email',
-                      },
-                    ]}
-                    hasFeedback
-                    name="email"
-                    label="Email"
-                  >
-                    <Input placeholder="Введите email" />
-                  </Form.Item>
-                  <Form.Item
                     name="password"
                     label="Пароль"
                     rules={[
@@ -92,47 +100,17 @@ function Register() {
                         message: 'Пожалуйста, введите пароль сотрудника',
                       },
                       { min: 6 },
-                      {
-                        validator: (_, value) =>
-                          value && value.includes('!')
-                            ? Promise.resolve()
-                            : Promise.reject(
-                                'Пароль не соответствует критериям'
-                              ),
-                      },
                     ]}
                     hasFeedback
                   >
                     <Input.Password placeholder="Введите пароль" />
                   </Form.Item>
-                  <Form.Item
-                    name="confirmPassword"
-                    label="Подтверждение пароля"
-                    dependencies={['password']}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          'Пожалуйста, повторно введите пароль сотрудника',
-                      },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (!value || getFieldValue('password') === value) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject('Пароли не совпадают');
-                        },
-                      }),
-                    ]}
-                    hasFeedback
-                  >
-                    <Input.Password placeholder="Повторите пароль" />
-                  </Form.Item>
 
                   <Form.Item name="gender" label="Пол" requiredMark="optional">
                     <Select placeholder="Выберите пол">
-                      <Select.Option value="male">Мужчина</Select.Option>
-                      <Select.Option value="female">Женщина</Select.Option>
+                      <Select.Option value="M">Мужчина</Select.Option>
+                      <Select.Option value="F">Женщина</Select.Option>
+                      <Select.Option value="O">Другой</Select.Option>
                     </Select>
                   </Form.Item>
                   <Form.Item

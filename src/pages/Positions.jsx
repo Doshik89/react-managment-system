@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Table, Popconfirm, Button, Space, Form, Input } from 'antd';
+import { Table, Popconfirm, Button, Space, Form, Input, message } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import Navbar from '../components/AppNavbar/navbar';
 import SideMenu from '../components/SideMenu/side-menu';
 import { Layout } from 'antd';
 import axios from 'axios';
+import Spinner from '../components/Spinner/Spinner';
 
 const { Content } = Layout;
 
@@ -23,10 +24,9 @@ function Positions() {
         headers: {
           Authorization: `Token ${token}`,
         },
-        mode: 'no-cors',
       })
       .then(res => {
-        setDataSource(res.data);
+        setDataSource(res.data.sort((a, b) => a.id - b.id));
         setLoading(false);
       })
       .catch(err => {
@@ -36,8 +36,20 @@ function Positions() {
   }, []);
 
   const handleDelete = value => {
-    let newContact = [...dataSource].filter(item => item.id !== value.id);
-    setDataSource(newContact);
+    const token = localStorage.getItem('token');
+    axios
+      .delete(`https://autovaq.herokuapp.com/api/position/${value.id}/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      })
+      .then(res => {
+        let newContact = [...dataSource].filter(item => item.id !== value.id);
+        setDataSource(newContact);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   const isEditing = record => {
@@ -54,9 +66,28 @@ function Positions() {
       const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setDataSource(newData);
-        setEditRowKey('');
+        const token = localStorage.getItem('token');
+        axios
+          .put(
+            `https://autovaq.herokuapp.com/api/position/${item.id}/`,
+            {
+              ...row,
+            },
+            {
+              headers: {
+                Authorization: `Token ${token}`,
+              },
+            }
+          )
+          .then(res => {
+            newData.splice(index, 1, { ...item, ...row });
+            setDataSource(newData);
+            setEditRowKey('');
+            message.success('Changes saved successfully');
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     } catch (error) {
       console.log('Error', error);
@@ -75,20 +106,25 @@ function Positions() {
     {
       title: 'Id',
       dataIndex: 'id',
+      key: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Position',
       dataIndex: 'pos',
+      editTable: true,
+      key: 'pos',
     },
     {
       title: 'Action',
       dataIndex: 'action',
       align: 'center',
+      key: 'action',
       render: (_, record) => {
         const editable = isEditing(record);
 
         return dataSource.length >= 1 ? (
-          <Space>
+          <Space key={record.id}>
             <Popconfirm
               title="Are you sure want to delete?"
               onConfirm={() => handleDelete(record)}
@@ -221,7 +257,7 @@ function Positions() {
               ></Space>
               <Form form={form} component={false}>
                 {loading ? (
-                  <p>Loading...</p>
+                  <Spinner />
                 ) : (
                   <Table
                     loading={loading}
