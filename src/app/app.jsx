@@ -8,6 +8,10 @@ import CompEquip from '../pages/compEquip';
 import Employees from '../pages/Employees';
 import Positions from '../pages/Positions';
 import Login from '../pages/LoginPage/login';
+import AddPositionForm from '../components/AddNew/AddPositionForm';
+import AddEmployeeForm from '../components/AddNew/AddEmployeeForm';
+import AddCompEq from '../components/AddNew/AddCompEq';
+import AddRepairEq from '../components/AddNew/AddRepairEq';
 
 function App() {
   return <ContentRoute />;
@@ -25,6 +29,10 @@ function ContentRoute() {
         <Route path="/employees" element={<Employees />}></Route>
         <Route path="/positions" element={<Positions />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/add_pos" element={<AddPositionForm />}></Route>
+        <Route path="/add_emp" element={<AddEmployeeForm />}></Route>
+        <Route path="/add_comp_eq" element={<AddCompEq />}></Route>
+        <Route path="/add_rep_eq" element={<AddRepairEq />}></Route>
       </Routes>
     </div>
   );

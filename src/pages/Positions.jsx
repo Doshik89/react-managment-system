@@ -7,6 +7,7 @@ import SideMenu from '../components/SideMenu/side-menu';
 import { Layout } from 'antd';
 import axios from 'axios';
 import Spinner from '../components/Spinner/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
@@ -15,6 +16,7 @@ function Positions() {
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -104,22 +106,22 @@ function Positions() {
 
   const columns = [
     {
+      key: '1',
       title: 'Id',
       dataIndex: 'id',
-      key: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
+      key: '2',
       title: 'Position',
       dataIndex: 'pos',
       editTable: true,
-      key: 'pos',
     },
     {
+      key: '3',
       title: 'Action',
       dataIndex: 'action',
       align: 'center',
-      key: 'action',
       render: (_, record) => {
         const editable = isEditing(record);
 
@@ -227,11 +229,17 @@ function Positions() {
                   <Button
                     style={{
                       marginTop: 15,
-                      backgroundColor: '#c2115e',
+                      backgroundColor: '#00B0FF',
                       color: '#fff',
                       width: 150,
                       height: 40,
+                      borderRadius: 5,
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      letterSpacing: 1,
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     }}
+                    onClick={() => navigate('/add_pos')}
                   >
                     Add New
                   </Button>
@@ -240,10 +248,15 @@ function Positions() {
                       marginTop: 15,
                       marginLeft: 10,
                       marginRight: 30,
-                      backgroundColor: '#c2115e',
+                      backgroundColor: '#00B0FF',
                       color: '#fff',
                       width: 150,
                       height: 40,
+                      borderRadius: 5,
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      letterSpacing: 1,
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     }}
                   >
                     <CSVLink data={dataSource}>Export</CSVLink>

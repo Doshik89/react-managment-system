@@ -59,7 +59,18 @@ function Register() {
                     ]}
                     hasFeedback
                   >
-                    <Input placeholder="Введите имя" />
+                    <Input
+                      style={{
+                        fontWeight: 'bold',
+                        borderRadius: 5,
+                        transition: 'all 0.2s ease-in-out',
+                        '&:focus': {
+                          borderColor: '#FFA100',
+                          boxShadow: '0 0 10px #FFA100',
+                        },
+                      }}
+                      placeholder="Введите имя"
+                    />
                   </Form.Item>
                   <Form.Item
                     name="first_name"
@@ -74,7 +85,18 @@ function Register() {
                     ]}
                     hasFeedback
                   >
-                    <Input placeholder="Введите имя" />
+                    <Input
+                      style={{
+                        fontWeight: 'bold',
+                        borderRadius: 5,
+                        transition: 'all 0.2s ease-in-out',
+                        '&:focus': {
+                          borderColor: '#FFA100',
+                          boxShadow: '0 0 10px #FFA100',
+                        },
+                      }}
+                      placeholder="Введите имя"
+                    />
                   </Form.Item>
                   <Form.Item
                     name="last_name"
@@ -89,7 +111,18 @@ function Register() {
                     ]}
                     hasFeedback
                   >
-                    <Input placeholder="Введите фамилию" />
+                    <Input
+                      style={{
+                        fontWeight: 'bold',
+                        borderRadius: 5,
+                        transition: 'all 0.2s ease-in-out',
+                        '&:focus': {
+                          borderColor: '#FFA100',
+                          boxShadow: '0 0 10px #FFA100',
+                        },
+                      }}
+                      placeholder="Введите фамилию"
+                    />
                   </Form.Item>
                   <Form.Item
                     name="password"
@@ -103,7 +136,18 @@ function Register() {
                     ]}
                     hasFeedback
                   >
-                    <Input.Password placeholder="Введите пароль" />
+                    <Input.Password
+                      style={{
+                        fontWeight: 'bold',
+                        borderRadius: 5,
+                        transition: 'all 0.2s ease-in-out',
+                        '&:focus': {
+                          borderColor: '#FFA100',
+                          boxShadow: '0 0 10px #FFA100',
+                        },
+                      }}
+                      placeholder="Введите пароль"
+                    />
                   </Form.Item>
 
                   <Form.Item name="gender" label="Пол" requiredMark="optional">

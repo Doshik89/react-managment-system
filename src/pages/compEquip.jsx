@@ -16,6 +16,7 @@ import SideMenu from '../components/SideMenu/side-menu';
 import { Layout } from 'antd';
 import axios from 'axios';
 import Spinner from '../components/Spinner/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
@@ -24,6 +25,7 @@ function СompEquip() {
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -48,7 +50,7 @@ function СompEquip() {
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/position/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/computer/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -80,7 +82,7 @@ function СompEquip() {
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/position/${item.id}/`,
+            `https://autovaq.herokuapp.com/api/computer/${item.id}/`,
             {
               ...row,
             },
@@ -280,11 +282,17 @@ function СompEquip() {
                   <Button
                     style={{
                       marginTop: 15,
-                      backgroundColor: '#c2115e',
+                      backgroundColor: '#00B0FF',
                       color: '#fff',
                       width: 150,
                       height: 40,
+                      borderRadius: 5,
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      letterSpacing: 1,
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     }}
+                    onClick={() => navigate('/add_comp_eq')}
                   >
                     Add New
                   </Button>
@@ -293,10 +301,15 @@ function СompEquip() {
                       marginTop: 15,
                       marginLeft: 10,
                       marginRight: 30,
-                      backgroundColor: '#c2115e',
+                      backgroundColor: '#00B0FF',
                       color: '#fff',
                       width: 150,
                       height: 40,
+                      borderRadius: 5,
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      letterSpacing: 1,
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     }}
                   >
                     <CSVLink data={dataSource}>Export</CSVLink>

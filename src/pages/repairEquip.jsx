@@ -13,9 +13,10 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import Navbar from '../components/AppNavbar/navbar';
 import SideMenu from '../components/SideMenu/side-menu';
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import axios from 'axios';
 import Spinner from '../components/Spinner/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
@@ -24,6 +25,7 @@ function RepairEquip() {
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -79,7 +81,7 @@ function RepairEquip() {
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/position/${item.id}/`,
+            `https://autovaq.herokuapp.com/api/request/${item.id}/`,
             {
               ...row,
             },
@@ -96,7 +98,10 @@ function RepairEquip() {
             message.success('Changes saved successfully');
           })
           .catch(err => {
-            message.error(err);
+            notification.error({
+              message: 'Changes were not saved',
+              description: 'Please try again later',
+            });
           });
       }
     } catch (error) {
@@ -113,6 +118,12 @@ function RepairEquip() {
   };
 
   const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      sorter: (a, b) => a.id - b.id,
+    },
     {
       title: 'ID сотрудника',
       dataIndex: 'emp_id',
@@ -151,11 +162,11 @@ function RepairEquip() {
       editTable: true,
       align: 'center',
       render: tag => {
-        const color = tag.includes('Accepted')
+        const color = tag.includes('Принято')
           ? 'Blue'
-          : tag.includes('On Workplace')
+          : tag.includes('В процессе')
           ? 'Orange'
-          : tag.includes('Done')
+          : tag.includes('Выполнено')
           ? 'Green'
           : 'Red';
         return (
@@ -279,11 +290,17 @@ function RepairEquip() {
                   <Button
                     style={{
                       marginTop: 15,
-                      backgroundColor: '#c2115e',
+                      backgroundColor: '#00B0FF',
                       color: '#fff',
                       width: 150,
                       height: 40,
+                      borderRadius: 5,
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      letterSpacing: 1,
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     }}
+                    onClick={() => navigate('/add_rep_eq')}
                   >
                     Add New
                   </Button>
@@ -292,10 +309,15 @@ function RepairEquip() {
                       marginTop: 15,
                       marginLeft: 10,
                       marginRight: 30,
-                      backgroundColor: '#c2115e',
+                      backgroundColor: '#00B0FF',
                       color: '#fff',
                       width: 150,
                       height: 40,
+                      borderRadius: 5,
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold',
+                      letterSpacing: 1,
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                     }}
                   >
                     <CSVLink data={dataSource}>Export</CSVLink>
