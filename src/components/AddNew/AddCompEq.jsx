@@ -118,7 +118,7 @@ function AddCompEq() {
           name="arrival_date"
           label="Дата прибытия"
         >
-          <Input placeholder="MM-DD-YYYY" className="inputField" />
+          <Input placeholder="YYYY-MM-DD" className="inputField" />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 24 }}
@@ -127,7 +127,7 @@ function AddCompEq() {
           name="deletion_date"
           label="Дата удаления"
         >
-          <Input placeholder="MM-DD-YYYY" className="inputField" />
+          <Input placeholder="YYYY-MM-DD" className="inputField" />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 24 }}

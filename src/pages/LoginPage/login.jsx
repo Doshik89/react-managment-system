@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Typography, Button, message } from 'antd';
+import { Form, Input, Typography, Button, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import teamImg from '../../resources/img/logBG.png';
@@ -27,12 +27,19 @@ const Login = () => {
   const handleSubmit = async values => {
     const { token, message: errorMessage } = await login(values);
     if (token) {
+      notification.success({
+        message: 'Login successful',
+        description: errorMessage,
+      });
       localStorage.setItem('token', token);
       navigate('/');
     } else {
-      message.error(
-        'Authorization failed. Please enter correct username and password.'
-      );
+      notification.error({
+        message:
+          'Authorization failed. Please enter correct username and password.',
+        description: errorMessage,
+      });
+
       setFormError(errorMessage);
     }
   };
@@ -50,13 +57,26 @@ const Login = () => {
                 rules={[
                   {
                     required: true,
-                    type: 'text',
-                    message: 'Please enter valid username',
+                    message: 'Please enter the username',
                   },
+                  { whitespace: true },
+                  { min: 3 },
                 ]}
+                hasFeedback
                 name="username"
               >
-                <Input placeholder="Username" size="large" />
+                <Input
+                  style={{
+                    borderRadius: 5,
+                    transition: 'all 0.2s ease-in-out',
+                    '&:focus': {
+                      borderColor: '#FFA100',
+                      boxShadow: '0 0 10px #FFA100',
+                    },
+                  }}
+                  placeholder="Username"
+                  size="large"
+                />
               </Form.Item>
               <Form.Item
                 rules={[
@@ -64,10 +84,23 @@ const Login = () => {
                     required: true,
                     message: 'Please enter your password',
                   },
+                  { whitespace: true },
+                  { min: 3 },
                 ]}
                 name="password"
               >
-                <Input.Password placeholder="Password" size="large" />
+                <Input.Password
+                  style={{
+                    borderRadius: 5,
+                    transition: 'all 0.2s ease-in-out',
+                    '&:focus': {
+                      borderColor: '#FFA100',
+                      boxShadow: '0 0 10px #FFA100',
+                    },
+                  }}
+                  placeholder="Password"
+                  size="large"
+                />
               </Form.Item>
               <Form.Item>
                 <Button

@@ -1,55 +1,60 @@
-import './side-menu.css';
-import { Menu, Layout } from 'antd'; // or 'antd/dist/antd.less'
-import { useNavigate } from 'react-router-dom';
 import {
+  TeamOutlined,
   HomeOutlined,
   DesktopOutlined,
-  TeamOutlined,
-  UserAddOutlined,
-  UserOutlined,
   FormOutlined,
+  UserOutlined,
+  UserAddOutlined,
 } from '@ant-design/icons';
+import { Layout, Menu } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './side-menu.css';
+
 const { Sider } = Layout;
 
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  };
+}
+const items = [
+  getItem('Home', '/', <HomeOutlined />),
+  getItem('Repair requests', '/repair_app', <FormOutlined />),
+  getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
+  getItem('Employee', '/employees', <TeamOutlined />),
+  getItem('Positions', '/positions', <UserOutlined />),
+  getItem('Registration', '/register', <UserAddOutlined />),
+];
 const SideMenu = () => {
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   return (
-    <Sider width={290} style={{ marginRight: 1 }}>
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={value => setCollapsed(value)}
+      width={220}
+      style={{
+        background: '#00a1dc',
+      }}
+    >
       <Menu
         className="sidebarMenu"
-        mode="inline"
         onClick={({ key }) => {
           navigate(key);
         }}
         defaultSelectedKeys={[window.location.pathname]}
+        mode="inline"
+        items={items}
         style={{
-          height: '100%',
-          borderRight: 0,
           background: '#00a1dc',
         }}
-        items={[
-          { label: 'Главная', key: '/', icon: <HomeOutlined /> },
-          {
-            label: 'Заявки на ремонт',
-            key: '/repair_app',
-            icon: <FormOutlined />,
-          },
-          {
-            label: 'Компьютерная техника',
-            key: '/computer_equip',
-            icon: <DesktopOutlined />,
-          },
-          { label: 'Сотрудники', key: '/employees', icon: <TeamOutlined /> },
-          { label: 'Должности', key: '/positions', icon: <UserOutlined /> },
-          {
-            label: 'Регистрация сотрудника',
-            key: '/register',
-            icon: <UserAddOutlined />,
-          },
-        ]}
       />
     </Sider>
   );
 };
-
 export default SideMenu;

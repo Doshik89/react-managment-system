@@ -25,16 +25,16 @@
   color: #002b73 !important;
 }
 
-.ant-menu-vertical .ant-menu-item,
 .ant-menu-vertical-left .ant-menu-item,
 .ant-menu-vertical-right .ant-menu-item,
 .ant-menu-inline .ant-menu-item,
-.ant-menu-vertical .ant-menu-submenu-title,
-.ant-menu-vertical-left .ant-menu-submenu-title,
-.ant-menu-vertical-right .ant-menu-submenu-title,
-.ant-menu-inline .ant-menu-submenu-title {
+.ant-menu-vertical-left {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
   padding-top: 25px !important;
   padding-bottom: 25px !important;
+}
+
+.ant-layout-sider-trigger {
+  background: #002b73;
 }

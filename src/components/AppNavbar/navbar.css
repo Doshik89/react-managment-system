@@ -6,6 +6,7 @@
 .navbar {
   background: #fff;
   z-index: 5;
+  position: relative;
 }
 
 .navbar-shadow {

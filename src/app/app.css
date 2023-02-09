@@ -8,3 +8,9 @@
 .site-layout-background {
   background: #f7f8fa;
 }
+
+.app {
+  display: flex;
+  position: relative;
+  min-height: 100vh;
+}

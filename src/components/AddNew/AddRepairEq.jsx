@@ -75,7 +75,7 @@ function AddRepairEq() {
         }
         const token = localStorage.getItem('token');
         const res = await axios.post(
-          'https://autovaq.herokuapp.com/api/employee/',
+          'https://autovaq.herokuapp.com/api/request/',
           values,
           {
             headers: {
@@ -117,8 +117,8 @@ function AddRepairEq() {
         >
           <Select className="inputField">
             {owner.map(owner => (
-              <Select.Option key={owner.id} value={owner.surname}>
-                {owner.surname}
+              <Select.Option key={owner.id} value={owner.id}>
+                {owner.surname} {owner.name}
               </Select.Option>
             ))}
           </Select>
@@ -132,7 +132,7 @@ function AddRepairEq() {
         >
           <Select className="inputField">
             {computer.map(computer => (
-              <Select.Option key={computer.id} value={computer.device_name}>
+              <Select.Option key={computer.id} value={computer.id}>
                 {computer.device_name}
               </Select.Option>
             ))}
@@ -145,7 +145,7 @@ function AddRepairEq() {
           name="reg_date"
           label="Дата регистрации"
         >
-          <Input placeholder="MM-DD-YYYY" className="inputField" />
+          <Input placeholder="YYYY-MM-DD" className="inputField" />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 24 }}
@@ -154,7 +154,7 @@ function AddRepairEq() {
           name="req_acc_date"
           label="Дата принятия"
         >
-          <Input placeholder="MM-DD-YYYY" className="inputField" />
+          <Input placeholder="YYYY-MM-DD" className="inputField" />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 24 }}
@@ -163,7 +163,7 @@ function AddRepairEq() {
           name="req_cmp_date"
           label="Дата выполнения"
         >
-          <Input placeholder="MM-DD-YYYY" className="inputField" />
+          <Input placeholder="YYYY-MM-DD" className="inputField" />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 24 }}
@@ -178,7 +178,7 @@ function AddRepairEq() {
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           className="formLabel"
-          name="condition"
+          name="req_status"
           label="Состояние"
         >
           <Select className="inputField">

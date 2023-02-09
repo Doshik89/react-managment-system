@@ -11,8 +11,6 @@ import {
 } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
-import Navbar from '../components/AppNavbar/navbar';
-import SideMenu from '../components/SideMenu/side-menu';
 import { Layout, notification } from 'antd';
 import axios from 'axios';
 import Spinner from '../components/Spinner/Spinner';
@@ -125,38 +123,38 @@ function RepairEquip() {
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'ID сотрудника',
+      title: 'Employee ID',
       dataIndex: 'emp_id',
       key: 'emp_id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'ID оборудование',
+      title: 'Equipment ID',
       dataIndex: 'computer',
       key: 'computer',
     },
     {
-      title: 'Дата регистрации',
+      title: 'Date of registration',
       dataIndex: 'reg_date',
       key: 'reg_date',
     },
     {
-      title: 'Дата принятия',
+      title: 'Date of acceptance',
       dataIndex: 'req_acc_date',
       key: 'req_acc_date',
     },
     {
-      title: 'Дата выполнения',
+      title: 'Date of completion',
       dataIndex: 'req_cmp_date',
       key: 'req_cmp_date',
     },
     {
-      title: 'Содержание',
+      title: 'Note',
       dataIndex: 'req_desc',
       key: 'req_desc',
     },
     {
-      title: 'Состояние',
+      title: 'Status',
       dataIndex: 'req_status',
       key: 'req_status',
       editTable: true,
@@ -273,82 +271,76 @@ function RepairEquip() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Navbar />
       <Layout>
-        <SideMenu />
-        <Layout>
-          <Content className="site-layout-background">
-            <div>
-              <Space
-                className="d-flex justify-content-between"
-                style={{ marginBottom: 20 }}
-              >
-                <h1 style={{ marginLeft: 20, marginTop: 30 }}>
-                  Заявки на ремонт
-                </h1>
-                <Space>
-                  <Button
-                    style={{
-                      marginTop: 15,
-                      backgroundColor: '#00B0FF',
-                      color: '#fff',
-                      width: 150,
-                      height: 40,
-                      borderRadius: 5,
-                      textTransform: 'uppercase',
-                      fontWeight: 'bold',
-                      letterSpacing: 1,
-                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                    }}
-                    onClick={() => navigate('/add_rep_eq')}
-                  >
-                    Add New
-                  </Button>
-                  <Button
-                    style={{
-                      marginTop: 15,
-                      marginLeft: 10,
-                      marginRight: 30,
-                      backgroundColor: '#00B0FF',
-                      color: '#fff',
-                      width: 150,
-                      height: 40,
-                      borderRadius: 5,
-                      textTransform: 'uppercase',
-                      fontWeight: 'bold',
-                      letterSpacing: 1,
-                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                    }}
-                  >
-                    <CSVLink data={dataSource}>Export</CSVLink>
-                  </Button>
-                </Space>
+        <Content className="site-layout-background">
+          <div>
+            <Space
+              className="d-flex justify-content-between"
+              style={{ marginBottom: 20 }}
+            >
+              <h1 style={{ marginLeft: 20, marginTop: 30 }}>Repair requests</h1>
+              <Space>
+                <Button
+                  style={{
+                    marginTop: 15,
+                    backgroundColor: '#00B0FF',
+                    color: '#fff',
+                    width: 150,
+                    height: 40,
+                    borderRadius: 5,
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    letterSpacing: 1,
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  }}
+                  onClick={() => navigate('/add_rep_eq')}
+                >
+                  Add New
+                </Button>
+                <Button
+                  style={{
+                    marginTop: 15,
+                    marginLeft: 10,
+                    marginRight: 30,
+                    backgroundColor: '#00B0FF',
+                    color: '#fff',
+                    width: 150,
+                    height: 40,
+                    borderRadius: 5,
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    letterSpacing: 1,
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  }}
+                >
+                  <CSVLink data={dataSource}>Export</CSVLink>
+                </Button>
               </Space>
+            </Space>
 
-              <Space
-                className="d-flex justify-content-center"
-                style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
-              ></Space>
-              <Form form={form} component={false}>
-                {loading ? (
-                  <Spinner />
-                ) : (
-                  <Table
-                    loading={loading}
-                    dataSource={dataSource}
-                    columns={mergedColumns}
-                    bordered
-                    components={{
-                      body: {
-                        cell: EditableCell,
-                      },
-                    }}
-                  />
-                )}
-              </Form>
-            </div>
-          </Content>
-        </Layout>
+            <Space
+              className="d-flex justify-content-center"
+              style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
+            ></Space>
+            <Form form={form} component={false}>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <Table
+                  loading={loading}
+                  dataSource={dataSource}
+                  columns={mergedColumns}
+                  bordered
+                  components={{
+                    body: {
+                      cell: EditableCell,
+                    },
+                  }}
+                />
+              )}
+            </Form>
+          </div>
+        </Content>
       </Layout>
     </Layout>
   );
