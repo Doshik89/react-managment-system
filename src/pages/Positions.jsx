@@ -82,6 +82,7 @@ function Positions() {
           .then(res => {
             newData.splice(index, 1, { ...item, ...row });
             setDataSource(newData);
+            console.log(newData);
             setEditRowKey('');
             message.success('Changes saved successfully');
           })

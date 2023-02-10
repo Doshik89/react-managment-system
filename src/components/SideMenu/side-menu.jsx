@@ -40,6 +40,7 @@ const SideMenu = () => {
       width={220}
       style={{
         background: '#00a1dc',
+        height: '100vh',
       }}
     >
       <Menu

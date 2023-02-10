@@ -142,6 +142,28 @@ function AddRepairEq() {
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           className="formLabel"
+          name="req_desc"
+          label="Содержание"
+        >
+          <Input.TextArea style={{ height: 50 }} className="inputField" />
+        </Form.Item>
+        <Form.Item
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          className="formLabel"
+          name="req_status"
+          label="Состояние"
+        >
+          <Select className="inputField">
+            <Select.Option value="Принято">Принято</Select.Option>
+            <Select.Option value="В процессе">В процессе</Select.Option>
+            <Select.Option value="Выполнено">Выполнено</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          className="formLabel"
           name="reg_date"
           label="Дата регистрации"
         >
@@ -165,28 +187,7 @@ function AddRepairEq() {
         >
           <Input placeholder="YYYY-MM-DD" className="inputField" />
         </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="req_desc"
-          label="Содержание"
-        >
-          <Input className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="req_status"
-          label="Состояние"
-        >
-          <Select className="inputField">
-            <Select.Option value="Принято">Принято</Select.Option>
-            <Select.Option value="В процессе">В процессе</Select.Option>
-            <Select.Option value="Выполнено">Выполнено</Select.Option>
-          </Select>
-        </Form.Item>
+
         <Form.Item className="d-flex justify-content-center">
           <Button type="primary" htmlType="submit">
             Submit

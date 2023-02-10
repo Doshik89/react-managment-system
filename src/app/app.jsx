@@ -42,7 +42,7 @@ function ContentRoute() {
       {location.pathname !== '/login' ? (
         <Layout>
           <Navbar />
-          <Layout style={{ minHeight: '100vh' }}>
+          <Layout>
             <SideMenu />
             <Layout>
               <Routes>

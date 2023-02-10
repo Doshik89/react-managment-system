@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Table,
-  Popconfirm,
-  Button,
-  Space,
-  Form,
-  Input,
-  Tag,
-  message,
-} from 'antd';
+import { Table, Popconfirm, Button, Space, Form, Input, Tag } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import { Layout, notification } from 'antd';
@@ -82,6 +73,7 @@ function RepairEquip() {
             `https://autovaq.herokuapp.com/api/request/${item.id}/`,
             {
               ...row,
+              status: 'completed', // update the status here
             },
             {
               headers: {
@@ -93,7 +85,9 @@ function RepairEquip() {
             newData.splice(index, 1, { ...item, ...row });
             setDataSource(newData);
             setEditRowKey('');
-            message.success('Changes saved successfully');
+            notification.success({
+              message: 'Changes saved successfully',
+            });
           })
           .catch(err => {
             notification.error({

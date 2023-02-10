@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, notification, Typography, Select } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  notification,
+  Typography,
+  Select,
+  Space,
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
 
@@ -83,52 +91,67 @@ function AddCompEq() {
 
   return (
     <div className="bodyAddNew">
+      <Typography.Title>Компьютерная техника</Typography.Title>
       <Form className="FormAddNew" form={form} onFinish={onFinish}>
-        <Typography.Title className="logTitle">
-          Компьютерная техника
-        </Typography.Title>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="owner"
-          label="Владелец"
-        >
-          <Select className="inputField">
-            {owner.map(owner => (
-              <Select.Option key={owner.id} value={owner.id}>
-                {owner.id}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="device_name"
-          label="Название оборудование"
-        >
-          <Input className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="arrival_date"
-          label="Дата прибытия"
-        >
-          <Input placeholder="YYYY-MM-DD" className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="deletion_date"
-          label="Дата удаления"
-        >
-          <Input placeholder="YYYY-MM-DD" className="inputField" />
-        </Form.Item>
+        <div className="leftSideForm">
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="owner"
+            label="Владелец"
+          >
+            <Select className="inputField">
+              {owner.map(owner => (
+                <Select.Option key={owner.id} value={owner.id}>
+                  {owner.name} {owner.surname} {owner.lastname}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="device_name"
+            label="Название оборудование"
+          >
+            <Input className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            s
+            name="notes"
+            label="Заметки"
+          >
+            <Input.TextArea
+              style={{ height: 100 }}
+              className="inputFieldNote"
+            />
+          </Form.Item>
+        </div>
+        <div className="rightSideForm">
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="arrival_date"
+            label="Дата прибытия"
+          >
+            <Input placeholder="YYYY-MM-DD" className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="deletion_date"
+            label="Дата удаления"
+          >
+            <Input placeholder="YYYY-MM-DD" className="inputField" />
+          </Form.Item>
+        </div>
         <Form.Item
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
@@ -145,15 +168,7 @@ function AddCompEq() {
             <Select.Option value="Снято с учета">Снято с учета</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="notes"
-          label="Заметки"
-        >
-          <Input className="inputFieldNote" />
-        </Form.Item>
+
         <Form.Item className="d-flex justify-content-center">
           <Button type="primary" htmlType="submit">
             Submit
