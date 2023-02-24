@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-function СompEquip() {
+function CompEquip() {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
@@ -340,4 +340,4 @@ function СompEquip() {
   );
 }
 
-export default СompEquip;
+export default CompEquip;

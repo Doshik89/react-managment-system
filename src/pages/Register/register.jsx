@@ -74,7 +74,7 @@ function Register() {
                     {
                       required: true,
                       message: "Please enter the employee's name",
-                    }, 
+                    },
                     { whitespace: true },
                     { min: 3 },
                   ]}
