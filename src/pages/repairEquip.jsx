@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Table, Popconfirm, Button, Space, Form, Input, Tag } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {
+  Table,
+  Popconfirm,
+  Button,
+  Space,
+  Form,
+  Input,
+  Tag,
+  Select,
+  Modal,
+} from 'antd';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import { Layout, notification } from 'antd';
 import axios from 'axios';
@@ -52,6 +62,27 @@ function RepairEquip() {
         console.log(err);
       });
   };
+
+  const handleView = record => {
+    Modal.info({
+      title: 'View Row Data',
+      content: (
+        <div>
+          {Object.keys(record).map(key =>
+            record[key] ? (
+              <p key={key}>
+                {key}: {record[key]}
+              </p>
+            ) : (
+              <p key={key}>{key}: None</p>
+            )
+          )}
+        </div>
+      ),
+      onOk() {},
+    });
+  };
+
   const isEditing = record => {
     return record.id === editRowKey;
   };
@@ -103,7 +134,6 @@ function RepairEquip() {
 
   const edit = record => {
     form.setFieldsValue({
-      pos: '',
       ...record,
     });
     setEditRowKey(record.id);
@@ -113,71 +143,117 @@ function RepairEquip() {
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'id',
+      key: '1',
       sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Employee ID',
       dataIndex: 'emp_id',
-      key: 'emp_id',
+      editTable: true,
+      key: '2',
+      sorter: (a, b) => a.id - b.id,
+    },
+    {
+      title: 'Sys ID',
+      dataIndex: 'sys_id',
+      editTable: true,
+      key: '3',
       sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Equipment ID',
       dataIndex: 'computer',
-      key: 'computer',
+      editTable: true,
+      key: '4',
     },
     {
       title: 'Date of registration',
       dataIndex: 'reg_date',
-      key: 'reg_date',
+      editTable: true,
+      key: '5',
     },
     {
       title: 'Date of acceptance',
       dataIndex: 'req_acc_date',
-      key: 'req_acc_date',
+      editTable: true,
+      key: '6',
     },
     {
       title: 'Date of completion',
       dataIndex: 'req_cmp_date',
-      key: 'req_cmp_date',
+      editTable: true,
+      key: '7',
     },
     {
       title: 'Note',
       dataIndex: 'req_desc',
-      key: 'req_desc',
+      editTable: true,
+      key: '8',
     },
     {
       title: 'Status',
       dataIndex: 'req_status',
-      key: 'req_status',
-      editTable: true,
+      key: '9',
       align: 'center',
-      render: tag => {
-        const color = tag.includes('Принято')
-          ? 'Blue'
-          : tag.includes('В процессе')
-          ? 'Orange'
-          : tag.includes('Выполнено')
-          ? 'Green'
-          : 'Red';
-        return (
-          <Tag color={color} key={tag}>
-            {tag}
+      render: (text, record) => {
+        const editable = isEditing(record);
+        let tagColor = '';
+        switch (text) {
+          case 'Принято':
+            tagColor = 'blue';
+            break;
+          case 'В процессе':
+            tagColor = 'orange';
+            break;
+          case 'Выполнено':
+            tagColor = 'green';
+            break;
+          default:
+            tagColor = 'gray';
+        }
+        return editable ? (
+          <Form.Item
+            name="req_status"
+            style={{ margin: 0 }}
+            rules={[{ required: true, message: 'Please select a status' }]}
+          >
+            <Select>
+              <Select.Option value="Принято">Принято</Select.Option>
+              <Select.Option value="В процессе">В процессе</Select.Option>
+              <Select.Option value="Выполнено">Выполнено</Select.Option>
+            </Select>
+          </Form.Item>
+        ) : (
+          <Tag color={tagColor}>
+            {text.includes('Принято')
+              ? 'Принято'
+              : text.includes('В процессе')
+              ? 'В процессе'
+              : text.includes('Выполнено')
+              ? 'Выполнено'
+              : ''}
           </Tag>
         );
       },
+      editable: true, // set editable to true for the status column
     },
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'action',
+      key: '10',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
 
         return dataSource.length >= 1 ? (
           <Space key={record.id}>
+            <Button
+              type="primary"
+              disabled={editable}
+              onClick={() => handleView(record)}
+            >
+              <EyeOutlined className="d-flex align-content-center" />
+            </Button>
             <Popconfirm
               title="Are you sure want to delete?"
               onConfirm={() => handleDelete(record)}

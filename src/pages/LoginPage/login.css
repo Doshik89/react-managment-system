@@ -10,7 +10,7 @@
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background: #2148c0;
+  background: #1e42b0;
 }
 
 .row {
@@ -24,7 +24,14 @@
   align-items: center;
 }
 
+.rightSide {
+  background-color: #18358c;
+  border-radius: 0 14px 14px 0;
+}
+
 .loginForm {
+  width: 350px;
+
   background-color: rgb(255, 255, 255, 0.33);
   box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
     rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;

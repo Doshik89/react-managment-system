@@ -9,6 +9,7 @@ import RepairEquip from '../pages/repairEquip';
 import CompEquip from '../pages/compEquip';
 import Employees from '../pages/Employees';
 import Positions from '../pages/Positions';
+import JobCatalog from '../pages/jobCatalog';
 import Login from '../pages/LoginPage/login';
 import AddPositionForm from '../components/AddNew/AddPositionForm';
 import AddEmployeeForm from '../components/AddNew/AddEmployeeForm';
@@ -53,6 +54,7 @@ function ContentRoute() {
                 <Route path="/computer_equip" element={<CompEquip />}></Route>
                 <Route path="/employees" element={<Employees />}></Route>
                 <Route path="/positions" element={<Positions />}></Route>
+                <Route path="/job_catalogue" element={<JobCatalog />}></Route>
                 <Route path="/register" element={<Register />}></Route>
                 <Route path="/add_pos" element={<AddPositionForm />}></Route>
                 <Route path="/add_emp" element={<AddEmployeeForm />}></Route>

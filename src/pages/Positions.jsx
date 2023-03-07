@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Table, Popconfirm, Button, Space, Form, Input, message } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {
+  Table,
+  Popconfirm,
+  Button,
+  Space,
+  Form,
+  Input,
+  message,
+  Modal,
+} from 'antd';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import { Layout } from 'antd';
 import axios from 'axios';
@@ -52,6 +61,26 @@ function Positions() {
       });
   };
 
+  const handleView = record => {
+    Modal.info({
+      title: 'View Row Data',
+      content: (
+        <div>
+          {Object.keys(record).map(key =>
+            record[key] ? (
+              <p key={key}>
+                {key}: {record[key]}
+              </p>
+            ) : (
+              <p key={key}>{key}: None</p>
+            )
+          )}
+        </div>
+      ),
+      onOk() {},
+    });
+  };
+
   const isEditing = record => {
     return record.id === editRowKey;
   };
@@ -97,7 +126,6 @@ function Positions() {
 
   const edit = record => {
     form.setFieldsValue({
-      pos: '',
       ...record,
     });
     setEditRowKey(record.id);
@@ -126,6 +154,13 @@ function Positions() {
 
         return dataSource.length >= 1 ? (
           <Space key={record.id}>
+            <Button
+              type="primary"
+              disabled={editable}
+              onClick={() => handleView(record)}
+            >
+              <EyeOutlined className="d-flex align-content-center" />
+            </Button>
             <Popconfirm
               title="Are you sure want to delete?"
               onConfirm={() => handleDelete(record)}

@@ -6,7 +6,6 @@ import {
   Space,
   Form,
   Input,
-  Tag,
   message,
   Modal,
 } from 'antd';
@@ -19,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-function CompEquip() {
+function JobCatalog() {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
@@ -30,11 +29,10 @@ function CompEquip() {
     const token = localStorage.getItem('token');
     setLoading(true);
     axios
-      .get('https://autovaq.herokuapp.com/api/computer/', {
+      .get('https://autovaq.herokuapp.com/api/job_catalogue/', {
         headers: {
           Authorization: `Token ${token}`,
         },
-        mode: 'no-cors',
       })
       .then(res => {
         setDataSource(res.data.sort((a, b) => a.id - b.id));
@@ -49,7 +47,7 @@ function CompEquip() {
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/computer/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/job_catalogue/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -90,7 +88,6 @@ function CompEquip() {
   const cancel = () => {
     setEditRowKey('');
   };
-
   const save = async id => {
     try {
       const row = await form.validateFields();
@@ -101,7 +98,7 @@ function CompEquip() {
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/computer/${item.id}/`,
+            `https://autovaq.herokuapp.com/api/job_catalogue/${item.id}/`,
             {
               ...row,
             },
@@ -114,11 +111,12 @@ function CompEquip() {
           .then(res => {
             newData.splice(index, 1, { ...item, ...row });
             setDataSource(newData);
+            console.log(newData);
             setEditRowKey('');
             message.success('Changes saved successfully');
           })
           .catch(err => {
-            message.error(err);
+            console.log(err);
           });
       }
     } catch (error) {
@@ -135,61 +133,27 @@ function CompEquip() {
 
   const columns = [
     {
+      key: '1',
       title: 'Id',
       dataIndex: 'id',
-      key: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Employee',
-      dataIndex: 'owner',
-      key: 'owner',
-    },
-    {
-      title: 'Equipment name',
-      dataIndex: 'device_name',
-      key: 'device_name',
-    },
-    {
-      title: 'Arrival date',
-      dataIndex: 'arrival_date',
-      key: 'arrival_date',
-    },
-    {
-      title: 'Date of deletion',
-      dataIndex: 'deletion_date',
-      key: 'deletion_date',
-    },
-    {
-      title: 'Note',
-      dataIndex: 'notes',
-      key: 'notes',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'condition',
-      key: 'condition',
+      key: '2',
+      title: 'Workplace Name',
+      dataIndex: 'workplace_name',
       editTable: true,
-      align: 'center',
-      render: tag => {
-        const color = tag.includes('В ремонте')
-          ? 'blue'
-          : tag.includes('Свободное')
-          ? 'orange'
-          : tag.includes('Снято с учета')
-          ? 'green'
-          : 'red';
-        return (
-          <Tag color={color} key={tag}>
-            {tag}
-          </Tag>
-        );
-      },
     },
     {
+      key: '3',
+      title: 'Cabinet',
+      dataIndex: 'cabinet',
+      editTable: true,
+    },
+    {
+      key: '3',
       title: 'Action',
       dataIndex: 'action',
-      key: 'id',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
@@ -297,9 +261,7 @@ function CompEquip() {
               className="d-flex justify-content-between"
               style={{ marginBottom: 20 }}
             >
-              <h1 style={{ marginLeft: 20, marginTop: 30 }}>
-                Computer equipment
-              </h1>
+              <h1 style={{ marginLeft: 20, marginTop: 30 }}>Job Catalogue</h1>
               <Space>
                 <Button
                   style={{
@@ -314,7 +276,7 @@ function CompEquip() {
                     letterSpacing: 1,
                     boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                   }}
-                  onClick={() => navigate('/add_comp_eq')}
+                  onClick={() => navigate('/add_pos')} //nado izmenit
                 >
                   Add New
                 </Button>
@@ -367,4 +329,4 @@ function CompEquip() {
   );
 }
 
-export default CompEquip;
+export default JobCatalog;

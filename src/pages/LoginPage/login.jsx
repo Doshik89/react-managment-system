@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Form, Input, Typography, Button, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,42 +7,48 @@ import './login.css';
 
 const API_AUTH_URL = 'https://autovaq.herokuapp.com/login/';
 
-const login = async values => {
-  try {
-    const { data } = await axios.post(API_AUTH_URL, values);
-    const { token } = data;
-    console.log(data);
-    return { success: true, token };
-  } catch (error) {
-    console.log(error);
-    return { success: false, message: error.response.data.message };
-  }
-};
-
 const Login = () => {
   const navigate = useNavigate();
 
   const [formError, setFormError] = useState(null);
 
-  const handleSubmit = async values => {
-    const { token, message: errorMessage } = await login(values);
-    if (token) {
-      notification.success({
-        message: 'Login successful',
-        description: errorMessage,
-      });
-      localStorage.setItem('token', token);
-      navigate('/');
-    } else {
-      notification.error({
-        message:
-          'Authorization failed. Please enter correct username and password.',
-        description: errorMessage,
-      });
+  const login = useMemo(
+    () => async values => {
+      try {
+        const { data } = await axios.post(API_AUTH_URL, values);
+        const { token } = data;
+        console.log(data);
+        return { success: true, token };
+      } catch (error) {
+        console.log(error);
+        return { success: false, message: error.response.data.message };
+      }
+    },
+    []
+  );
 
-      setFormError(errorMessage);
-    }
-  };
+  const handleSubmit = useCallback(
+    async values => {
+      const { token, message: errorMessage } = await login(values);
+      if (token) {
+        notification.success({
+          message: 'Login successful',
+          description: errorMessage,
+        });
+        localStorage.setItem('token', token);
+        navigate('/');
+      } else {
+        notification.error({
+          message:
+            'Authorization failed. Please enter correct username and password.',
+          description: errorMessage,
+        });
+
+        setFormError(errorMessage);
+      }
+    },
+    [login, navigate, setFormError]
+  );
 
   return (
     <div className="body">

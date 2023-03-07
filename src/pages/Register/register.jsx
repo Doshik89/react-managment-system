@@ -1,5 +1,5 @@
 import './register.css';
-import { Form, Button, Input, Select } from 'antd';
+import { Form, Button, Input, Select, notification } from 'antd';
 import { Layout } from 'antd';
 import axios from 'axios';
 
@@ -10,9 +10,25 @@ const onFinish = values => {
     .post('https://autovaq.herokuapp.com/register/', values)
     .then(res => {
       console.log(res);
+      notification.success({
+        message: 'Registration successful!',
+        duration: 2,
+      });
     })
     .catch(err => {
-      console.error(err);
+      if (err.response && err.response.status === 400) {
+        console.error(err.response.data);
+        notification.error({
+          message: 'This username already exists',
+          duration: 2,
+        });
+      } else {
+        console.error(err);
+        notification.error({
+          message: 'An error occurred',
+          duration: 2,
+        });
+      }
     });
 };
 
@@ -145,11 +161,37 @@ function Register() {
                   />
                 </Form.Item>
 
-                <Form.Item name="gender" label="Gender" requiredMark="optional">
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select the gender',
+                    },
+                  ]}
+                  name="gender"
+                  label="Gender"
+                >
                   <Select placeholder="Choose a gender">
                     <Select.Option value="M">Male</Select.Option>
                     <Select.Option value="F">Female</Select.Option>
                     <Select.Option value="O">Other</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select the role',
+                    },
+                  ]}
+                  name="role"
+                  label="Role"
+                >
+                  <Select placeholder="Choose a role">
+                    <Select.Option value="Admin">Admin</Select.Option>
+                    <Select.Option value="Employee">Employee</Select.Option>
+                    <Select.Option value="SysAdmin">SysAdmin</Select.Option>
+                    <Select.Option value="HR">HR</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
