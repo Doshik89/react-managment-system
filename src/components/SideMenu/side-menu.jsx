@@ -5,6 +5,7 @@ import {
   FormOutlined,
   UserOutlined,
   UserAddOutlined,
+  ReadOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
@@ -27,7 +28,7 @@ const items = [
   getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
   getItem('Employee', '/employees', <TeamOutlined />),
   getItem('Positions', '/positions', <UserOutlined />),
-  getItem('Job catalogue', '/job_catalogue', <UserOutlined />),
+  getItem('Job catalogue', '/job_catalogue', <ReadOutlined />),
   getItem('Registration', '/register', <UserAddOutlined />),
 ];
 const SideMenu = () => {

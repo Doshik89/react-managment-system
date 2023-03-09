@@ -8,6 +8,7 @@ import {
   Input,
   message,
   Modal,
+  Select,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
@@ -22,6 +23,7 @@ function Employee() {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
+  const [workplaces, setWorkplaces] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -35,7 +37,7 @@ function Employee() {
         },
       })
       .then(res => {
-        setDataSource(res.data.sort((a, b) => a.id - b.id));
+        setDataSource(res.data);
         setLoading(false);
       })
       .catch(err => {
@@ -96,12 +98,17 @@ function Employee() {
       const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
+        // update the item with the new data
+        newData[index] = { ...item, ...row };
         const token = localStorage.getItem('token');
         axios
           .put(
             `https://autovaq.herokuapp.com/api/employee/${item.id}/`,
             {
-              ...row,
+              ...item,
+              workplace_id: workplaces.find(
+                w => w.workplace_name === row.workplace
+              )?.id,
             },
             {
               headers: {
@@ -110,7 +117,6 @@ function Employee() {
             }
           )
           .then(res => {
-            newData.splice(index, 1, { ...item, ...row });
             setDataSource(newData);
             setEditRowKey('');
             message.success('Changes saved successfully');
@@ -127,9 +133,27 @@ function Employee() {
   const edit = record => {
     form.setFieldsValue({
       ...record,
+      workplace: workplaces.find(w => w.id === record.workplace_id)
+        ?.workplace_name,
     });
     setEditRowKey(record.id);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios
+      .get('https://autovaq.herokuapp.com/api/job_catalogue/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      })
+      .then(res => {
+        setWorkplaces(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   const columns = [
     {
@@ -166,7 +190,28 @@ function Employee() {
       title: 'Workplace',
       dataIndex: 'workplace',
       key: 'workplace',
-      editTable: true,
+      render: (_, record) => {
+        return isEditing(record) ? (
+          <Form.Item
+            name="workplace"
+            style={{ margin: 0 }}
+            rules={[{ required: true, message: 'Please select a workplace' }]}
+          >
+            <Select>
+              {workplaces.map(workplace => (
+                <Select.Option
+                  key={workplace.workplace_name}
+                  value={workplace.workplace_name}
+                >
+                  {workplace.workplace_name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        ) : (
+          record.workplace
+        );
+      },
     },
     {
       title: 'Action',
