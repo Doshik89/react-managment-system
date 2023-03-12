@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, notification, Typography, Select } from 'antd';
+import {
+  Layout,
+  Form,
+  Input,
+  Button,
+  notification,
+  Typography,
+  Select,
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
 
@@ -102,99 +110,101 @@ function AddRepairEq() {
   );
 
   return (
-    <div className="bodyAddNew">
-      <Form className="FormAddNew" form={form} onFinish={onFinish}>
-        <Typography.Title className="logTitle">
-          {' '}
-          Заявки на ремонт
-        </Typography.Title>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="emp_id"
-          label="Сотрудник"
-        >
-          <Select className="inputField">
-            {owner.map(owner => (
-              <Select.Option key={owner.id} value={owner.id}>
-                {owner.surname} {owner.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="computer"
-          label="Оборудование"
-        >
-          <Select className="inputField">
-            {computer.map(computer => (
-              <Select.Option key={computer.id} value={computer.id}>
-                {computer.device_name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="req_desc"
-          label="Содержание"
-        >
-          <Input.TextArea style={{ height: 50 }} className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="req_status"
-          label="Состояние"
-        >
-          <Select className="inputField">
-            <Select.Option value="Принято">Принято</Select.Option>
-            <Select.Option value="В процессе">В процессе</Select.Option>
-            <Select.Option value="Выполнено">Выполнено</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="reg_date"
-          label="Дата регистрации"
-        >
-          <Input placeholder="YYYY-MM-DD" className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="req_acc_date"
-          label="Дата принятия"
-        >
-          <Input placeholder="YYYY-MM-DD" className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="req_cmp_date"
-          label="Дата выполнения"
-        >
-          <Input placeholder="YYYY-MM-DD" className="inputField" />
-        </Form.Item>
+    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+      <div className="bodyAddNew">
+        <Form className="FormAddNew" form={form} onFinish={onFinish}>
+          <Typography.Title className="logTitle">
+            {' '}
+            Заявки на ремонт
+          </Typography.Title>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="emp_id"
+            label="Сотрудник"
+          >
+            <Select className="inputField">
+              {owner.map(owner => (
+                <Select.Option key={owner.id} value={owner.id}>
+                  {owner.surname} {owner.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="computer"
+            label="Оборудование"
+          >
+            <Select className="inputField">
+              {computer.map(computer => (
+                <Select.Option key={computer.id} value={computer.id}>
+                  {computer.device_name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="req_desc"
+            label="Содержание"
+          >
+            <Input.TextArea style={{ height: 50 }} className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="req_status"
+            label="Состояние"
+          >
+            <Select className="inputField">
+              <Select.Option value="Принято">Принято</Select.Option>
+              <Select.Option value="В процессе">В процессе</Select.Option>
+              <Select.Option value="Выполнено">Выполнено</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="reg_date"
+            label="Дата регистрации"
+          >
+            <Input placeholder="YYYY-MM-DD" className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="req_acc_date"
+            label="Дата принятия"
+          >
+            <Input placeholder="YYYY-MM-DD" className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="req_cmp_date"
+            label="Дата выполнения"
+          >
+            <Input placeholder="YYYY-MM-DD" className="inputField" />
+          </Form.Item>
 
-        <Form.Item className="d-flex justify-content-center">
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+          <Form.Item className="d-flex justify-content-center">
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Layout>
   );
 }
 

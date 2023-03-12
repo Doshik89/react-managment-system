@@ -42,7 +42,10 @@ const SideMenu = () => {
       width={220}
       style={{
         background: '#00a1dc',
-        height: '100vh',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
       }}
     >
       <Menu

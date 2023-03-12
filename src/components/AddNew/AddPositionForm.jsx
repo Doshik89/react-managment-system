@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, notification, Typography } from 'antd';
+import { Form, Input, Button, notification, Typography, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
 
@@ -50,25 +50,27 @@ function AddPositionForm() {
   );
 
   return (
-    <div className="bodyAddNew">
-      <Form className="FormAddNew" form={form} onFinish={onFinish}>
-        <Typography.Title className="logTitle">Должности</Typography.Title>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="pos"
-          label="Position"
-        >
-          <Input className="inputField" />
-        </Form.Item>
-        <Form.Item className="d-flex justify-content-center">
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+      <div className="bodyAddNew">
+        <Form className="FormAddNew" form={form} onFinish={onFinish}>
+          <Typography.Title className="logTitle">Должности</Typography.Title>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="pos"
+            label="Position"
+          >
+            <Input className="inputField" />
+          </Form.Item>
+          <Form.Item className="d-flex justify-content-center">
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Layout>
   );
 }
 

@@ -7,7 +7,7 @@ import {
   notification,
   Typography,
   Select,
-  Space,
+  Layout,
 } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
@@ -90,92 +90,94 @@ function AddCompEq() {
   );
 
   return (
-    <div className="bodyAddNew">
-      <Typography.Title>Компьютерная техника</Typography.Title>
-      <Form className="FormAddNew" form={form} onFinish={onFinish}>
-        <div className="leftSideForm">
+    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+      <div className="bodyAddNew">
+        <Typography.Title>Компьютерная техника</Typography.Title>
+        <Form className="FormAddNew" form={form} onFinish={onFinish}>
+          <div className="leftSideForm">
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              name="owner"
+              label="Владелец"
+            >
+              <Select className="inputField">
+                {owner.map(owner => (
+                  <Select.Option key={owner.id} value={owner.id}>
+                    {owner.name} {owner.surname} {owner.lastname}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              name="device_name"
+              label="Название оборудование"
+            >
+              <Input className="inputField" />
+            </Form.Item>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              s
+              name="notes"
+              label="Заметки"
+            >
+              <Input.TextArea
+                style={{ height: 100 }}
+                className="inputFieldNote"
+              />
+            </Form.Item>
+          </div>
+          <div className="rightSideForm">
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              name="arrival_date"
+              label="Дата прибытия"
+            >
+              <Input placeholder="YYYY-MM-DD" className="inputField" />
+            </Form.Item>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              name="deletion_date"
+              label="Дата удаления"
+            >
+              <Input placeholder="YYYY-MM-DD" className="inputField" />
+            </Form.Item>
+          </div>
           <Form.Item
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             className="formLabel"
-            name="owner"
-            label="Владелец"
+            name="condition"
+            label="Состояние"
           >
             <Select className="inputField">
-              {owner.map(owner => (
-                <Select.Option key={owner.id} value={owner.id}>
-                  {owner.name} {owner.surname} {owner.lastname}
-                </Select.Option>
-              ))}
+              <Select.Option value="Свободное">Свободное</Select.Option>
+              <Select.Option value="На рабочем месте">
+                На рабочем месте
+              </Select.Option>
+              <Select.Option value="В ремонте">В ремонте</Select.Option>
+              <Select.Option value="Снято с учета">Снято с учета</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="device_name"
-            label="Название оборудование"
-          >
-            <Input className="inputField" />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            s
-            name="notes"
-            label="Заметки"
-          >
-            <Input.TextArea
-              style={{ height: 100 }}
-              className="inputFieldNote"
-            />
-          </Form.Item>
-        </div>
-        <div className="rightSideForm">
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="arrival_date"
-            label="Дата прибытия"
-          >
-            <Input placeholder="YYYY-MM-DD" className="inputField" />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="deletion_date"
-            label="Дата удаления"
-          >
-            <Input placeholder="YYYY-MM-DD" className="inputField" />
-          </Form.Item>
-        </div>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="condition"
-          label="Состояние"
-        >
-          <Select className="inputField">
-            <Select.Option value="Свободное">Свободное</Select.Option>
-            <Select.Option value="На рабочем месте">
-              На рабочем месте
-            </Select.Option>
-            <Select.Option value="В ремонте">В ремонте</Select.Option>
-            <Select.Option value="Снято с учета">Снято с учета</Select.Option>
-          </Select>
-        </Form.Item>
 
-        <Form.Item className="d-flex justify-content-center">
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+          <Form.Item className="d-flex justify-content-center">
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Layout>
   );
 }
 

@@ -316,7 +316,7 @@ function Employee() {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
       <Layout>
         <Content className="site-layout-background">
           <div>

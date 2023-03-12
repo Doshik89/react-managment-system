@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, notification, Typography, Select } from 'antd';
+import {
+  Layout,
+  Form,
+  Input,
+  Button,
+  notification,
+  Typography,
+  Select,
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
 
@@ -103,76 +111,78 @@ function AddEmployeeForm() {
   );
 
   return (
-    <div className="bodyAddNew">
-      <Form className="FormAddNew" form={form} onFinish={onFinish}>
-        <Typography.Title className="logTitle">Сотрудники</Typography.Title>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="position"
-          label="Должность"
-        >
-          <Select className="inputField">
-            {positions.map(position => (
-              <Select.Option key={position.id} value={position.pos}>
-                {position.pos}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="name"
-          label="Имя"
-        >
-          <Input className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="surname"
-          label="Фамилия"
-        >
-          <Input className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="lastname"
-          label="Отчество"
-        >
-          <Input className="inputField" />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          className="formLabel"
-          name="workplace"
-          label="Место работы"
-        >
-          <Select className="inputField">
-            {workplaces.map(workplace => (
-              <Select.Option
-                key={workplace.id}
-                value={workplace.workplace_name}
-              >
-                {workplace.workplace_name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item className="d-flex justify-content-center">
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+      <div className="bodyAddNew">
+        <Form className="FormAddNew" form={form} onFinish={onFinish}>
+          <Typography.Title className="logTitle">Сотрудники</Typography.Title>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="position"
+            label="Должность"
+          >
+            <Select className="inputField">
+              {positions.map(position => (
+                <Select.Option key={position.id} value={position.pos}>
+                  {position.pos}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="name"
+            label="Имя"
+          >
+            <Input className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="surname"
+            label="Фамилия"
+          >
+            <Input className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="lastname"
+            label="Отчество"
+          >
+            <Input className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="workplace"
+            label="Место работы"
+          >
+            <Select className="inputField">
+              {workplaces.map(workplaces => (
+                <Select.Option
+                  key={workplaces.id}
+                  value={workplaces.workplace_name}
+                >
+                  {workplaces.workplace_name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item className="d-flex justify-content-center">
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Layout>
   );
 }
 
