@@ -55,7 +55,11 @@ const Login = () => {
       <div className="logBG container ">
         <div className="row g-0">
           <div className="leftSide col-lg-5">
-            <Form className="loginForm" onFinish={handleSubmit}>
+            <Form
+              className="loginForm"
+              onFinish={handleSubmit}
+              autocomplete="on"
+            >
               <Typography.Title className="logTitle">
                 InControll
               </Typography.Title>

@@ -13,11 +13,11 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar navbar-dark sticky-top flex-md-nowrap p-0 navbar-shadow">
+    <nav className="navbar navbar-dark sticky-top flex-md-nowrap p-0 navbar-shadow">
       <a className="navbar-brand col-md-3 col-lg-2 me-0 px-1" href="/">
         <img className="logo" src={logo} alt="Logo" />
       </a>
-      <div className="navbar-nav">
+      <div className="navbar-nav d-flex flex-wrap">
         <div className="d-flex align-items-center btn-outline">
           <Button className="nav-link px-3 btn" danger onClick={logout}>
             <Space>
@@ -26,7 +26,7 @@ const Navbar = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

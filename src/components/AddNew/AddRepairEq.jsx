@@ -4,7 +4,9 @@ import {
   Layout,
   Form,
   Input,
+  Space,
   Button,
+  DatePicker,
   notification,
   Typography,
   Select,
@@ -169,34 +171,51 @@ function AddRepairEq() {
               <Select.Option value="Выполнено">Выполнено</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="reg_date"
-            label="Дата регистрации"
-          >
-            <Input placeholder="YYYY-MM-DD" className="inputField" />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="req_acc_date"
-            label="Дата принятия"
-          >
-            <Input placeholder="YYYY-MM-DD" className="inputField" />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="req_cmp_date"
-            label="Дата выполнения"
-          >
-            <Input placeholder="YYYY-MM-DD" className="inputField" />
-          </Form.Item>
-
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              name="reg_date"
+              label="Дата регистрации"
+            >
+              <DatePicker
+                format="YYYY-MM-DD"
+                className="inputField"
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+            <div style={{ display: 'grid', placeItems: 'center', flex: 1 }}>
+              <Space direction="vertical" size={16}>
+                <Form.Item
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  className="formLabel"
+                  name="req_acc_date"
+                  label="Дата принятия"
+                >
+                  <DatePicker
+                    format="YYYY-MM-DD"
+                    className="inputField"
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Space>
+            </div>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              className="formLabel"
+              name="req_cmp_date"
+              label="Дата выполнения"
+            >
+              <DatePicker
+                format="YYYY-MM-DD"
+                className="inputField"
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+          </div>
           <Form.Item className="d-flex justify-content-center">
             <Button type="primary" htmlType="submit">
               Submit

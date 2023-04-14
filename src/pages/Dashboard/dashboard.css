@@ -1,14 +1,18 @@
-.main-title {
-  margin-top: 30px;
-  padding: 25px;
-}
-
-.main-title h2 {
-  margin-top: 5%;
+.welcome {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #f5f5f5;
   text-align: center;
+  border-radius: 5px;
 }
 
-.titlePNG {
-  width: 50%;
-  margin-top: 1%;
+.welcome h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.welcome p {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }

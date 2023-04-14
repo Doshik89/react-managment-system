@@ -172,11 +172,11 @@ function CompEquip() {
       editTable: true,
       align: 'center',
       render: tag => {
-        const color = tag.includes('В ремонте')
-          ? 'blue'
-          : tag.includes('Свободное')
+        const color = tag.includes('Снято с учета')
           ? 'orange'
-          : tag.includes('Снято с учета')
+          : tag.includes('Свободное')
+          ? 'blue'
+          : tag.includes('На рабочем месте')
           ? 'green'
           : 'red';
         return (
@@ -289,7 +289,7 @@ function CompEquip() {
   };
 
   return (
-    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+    <Layout>
       <Layout>
         <Content className="site-layout-background">
           <div>
@@ -352,6 +352,7 @@ function CompEquip() {
                   dataSource={dataSource}
                   columns={mergedColumns}
                   bordered
+                  responsive
                   components={{
                     body: {
                       cell: EditableCell,

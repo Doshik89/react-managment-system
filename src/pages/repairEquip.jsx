@@ -104,7 +104,6 @@ function RepairEquip() {
             `https://autovaq.herokuapp.com/api/request/${item.id}/`,
             {
               ...row,
-              status: 'completed', // update the status here
             },
             {
               headers: {
@@ -135,6 +134,8 @@ function RepairEquip() {
   const edit = record => {
     form.setFieldsValue({
       ...record,
+      emp_id: record.emp_id || '',
+      sys_id: record.sys_id || '',
     });
     setEditRowKey(record.id);
   };
@@ -163,25 +164,25 @@ function RepairEquip() {
     {
       title: 'Equipment ID',
       dataIndex: 'computer',
-      editTable: true,
+      editTable: false,
       key: '4',
     },
     {
       title: 'Date of registration',
       dataIndex: 'reg_date',
-      editTable: true,
+      editTable: false,
       key: '5',
     },
     {
       title: 'Date of acceptance',
       dataIndex: 'req_acc_date',
-      editTable: true,
+      editTable: false,
       key: '6',
     },
     {
       title: 'Date of completion',
       dataIndex: 'req_cmp_date',
-      editTable: true,
+      editTable: false,
       key: '7',
     },
     {
@@ -340,7 +341,7 @@ function RepairEquip() {
   };
 
   return (
-    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+    <Layout>
       <Layout>
         <Content className="site-layout-background">
           <div>
@@ -401,6 +402,7 @@ function RepairEquip() {
                   dataSource={dataSource}
                   columns={mergedColumns}
                   bordered
+                  responsive
                   components={{
                     body: {
                       cell: EditableCell,

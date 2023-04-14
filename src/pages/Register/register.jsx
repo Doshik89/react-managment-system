@@ -34,7 +34,7 @@ const onFinish = values => {
 
 function Register() {
   return (
-    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+    <Layout >
       <Layout>
         <Content className="site-layout-background">
           <div className="container  d-flex justify-content-center vertical-center">

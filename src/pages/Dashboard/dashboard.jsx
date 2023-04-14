@@ -1,7 +1,6 @@
 import './dashboard.css';
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
-import titlePNG from '../../resources/img/titlePNG.png';
 import { Layout } from 'antd';
 
 const { Content } = Layout;
@@ -11,9 +10,9 @@ const MainTitle = () => {
 
   const token = localStorage.getItem('token');
 
-  const fetchPositions = useCallback(async () => {
+  const fetchRole = useCallback(async () => {
     try {
-      const res = await axios.get('https://autovaq.herokuapp.com/api/login/', {
+      const res = await axios.get('https://autovaq.herokuapp.com/view-role/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -25,21 +24,17 @@ const MainTitle = () => {
   }, [token]);
 
   useEffect(() => {
-    fetchPositions();
-  }, [fetchPositions]);
+    fetchRole();
+  }, [fetchRole]);
 
   return (
-    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+    <Layout>
       <Layout>
         <Content className="site-layout-background">
-          <div className="main-title">
-            <div>
-              <h2>Welcome back, {username}</h2>
-            </div>
-
-            <div className="d-flex justify-content-center">
-              <img className="titlePNG " src={titlePNG} alt="titlePNG" />
-            </div>
+          <div className="welcome">
+            <h1>Welcome back, {username}!</h1>
+            <p>You have successfully logged in to your account.</p>
+            <p>What would you like to do today?</p>
           </div>
         </Content>
       </Layout>

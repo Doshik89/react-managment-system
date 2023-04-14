@@ -247,7 +247,7 @@ function Positions() {
   };
 
   return (
-    <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
+    <Layout>
       <Layout>
         <Content className="site-layout-background">
           <div>
@@ -308,6 +308,7 @@ function Positions() {
                   dataSource={dataSource}
                   columns={mergedColumns}
                   bordered
+                  responsive
                   components={{
                     body: {
                       cell: EditableCell,

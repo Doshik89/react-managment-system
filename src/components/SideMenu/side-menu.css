@@ -1,6 +1,5 @@
 .sidebarMenu {
   background: #00a1dc;
-  color: #fff;
   font-weight: 500;
 
   transition: 0.3s ease;
@@ -8,10 +7,6 @@
 
 .ant-menu {
   color: #fff !important;
-}
-
-.info-header a + a {
-  margin-left: 10px;
 }
 
 .ant-menu-vertical .ant-menu-item::after,
