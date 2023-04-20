@@ -44,13 +44,7 @@ function AddCompEq() {
 
   const onFinish = useCallback(
     async values => {
-      const requiredFields = [
-        'device_name',
-        'arrival_date',
-        'deletion_date',
-        'condition',
-        'notes',
-      ];
+      const requiredFields = ['device_name', 'condition', 'notes'];
       try {
         for (const field of requiredFields) {
           if (!values[field] || values[field].trim().length === 0) {
@@ -94,65 +88,43 @@ function AddCompEq() {
       <div className="bodyAddNew">
         <Typography.Title>Компьютерная техника</Typography.Title>
         <Form className="FormAddNew" form={form} onFinish={onFinish}>
-          <div className="leftSideForm">
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              name="owner"
-              label="Владелец"
-            >
-              <Select className="inputField">
-                {owner.map(owner => (
-                  <Select.Option key={owner.id} value={owner.id}>
-                    {owner.name} {owner.surname} {owner.lastname}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              name="device_name"
-              label="Название оборудование"
-            >
-              <Input className="inputField" />
-            </Form.Item>
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              s
-              name="notes"
-              label="Заметки"
-            >
-              <Input.TextArea
-                style={{ height: 100 }}
-                className="inputFieldNote"
-              />
-            </Form.Item>
-          </div>
-          <div className="rightSideForm">
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              name="arrival_date"
-              label="Дата прибытия"
-            >
-              <Input placeholder="YYYY-MM-DD" className="inputField" />
-            </Form.Item>
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              name="deletion_date"
-              label="Дата удаления"
-            >
-              <Input placeholder="YYYY-MM-DD" className="inputField" />
-            </Form.Item>
-          </div>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="owner"
+            label="Владелец"
+          >
+            <Select className="inputField">
+              {owner.map(owner => (
+                <Select.Option key={owner.id} value={owner.id}>
+                  {owner.name} {owner.surname} {owner.lastname}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="device_name"
+            label="Название оборудование"
+          >
+            <Input className="inputField" />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            s
+            name="notes"
+            label="Заметки"
+          >
+            <Input.TextArea
+              style={{ height: 100 }}
+              className="inputFieldNote"
+            />
+          </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}

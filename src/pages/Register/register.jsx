@@ -34,7 +34,7 @@ const onFinish = values => {
 
 function Register() {
   return (
-    <Layout >
+    <Layout>
       <Layout>
         <Content className="site-layout-background">
           <div className="container  d-flex justify-content-center vertical-center">
@@ -85,11 +85,11 @@ function Register() {
                 </Form.Item>
                 <Form.Item
                   name="first_name"
-                  label="Employee's name"
+                  label="First name"
                   rules={[
                     {
                       required: true,
-                      message: "Please enter the employee's name",
+                      message: 'Please enter the name',
                     },
                     { whitespace: true },
                     { min: 3 },
@@ -111,11 +111,37 @@ function Register() {
                 </Form.Item>
                 <Form.Item
                   name="last_name"
-                  label="Employee's last name"
+                  label="Last name"
                   rules={[
                     {
                       required: true,
-                      message: "Please enter the employee's last name",
+                      message: 'Please enter the last name',
+                    },
+                    { whitespace: true },
+                    { min: 3 },
+                  ]}
+                  hasFeedback
+                >
+                  <Input
+                    style={{
+                      fontWeight: 'bold',
+                      borderRadius: 5,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:focus': {
+                        borderColor: '#FFA100',
+                        boxShadow: '0 0 10px #FFA100',
+                      },
+                    }}
+                    placeholder="Enter your last name"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="surname"
+                  label="Surname"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter the last name',
                     },
                     { whitespace: true },
                     { min: 3 },

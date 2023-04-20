@@ -4,9 +4,7 @@ import {
   Layout,
   Form,
   Input,
-  Space,
   Button,
-  DatePicker,
   notification,
   Typography,
   Select,
@@ -67,15 +65,11 @@ function AddRepairEq() {
 
   const onFinish = useCallback(
     async values => {
-      const requiredFields = [
-        'req_desc',
-        'req_acc_date',
-        'reg_date',
-        'req_cmp_date',
-      ];
+      const requiredFields = ['req_desc'];
       try {
         for (const field of requiredFields) {
-          if (!values[field] || values[field].trim().length === 0) {
+          const value = values[field];
+          if (typeof value !== 'string' || value.trim().length === 0) {
             notification.error({
               message: 'Fields cannot be empty or contain only spaces',
               description: `Enter proper details in "${field}" field`,
@@ -83,10 +77,15 @@ function AddRepairEq() {
             return;
           }
         }
+
+        const data = {
+          ...values,
+        };
+
         const token = localStorage.getItem('token');
         const res = await axios.post(
           'https://autovaq.herokuapp.com/api/request/',
-          values,
+          data,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -129,7 +128,7 @@ function AddRepairEq() {
             <Select className="inputField">
               {owner.map(owner => (
                 <Select.Option key={owner.id} value={owner.id}>
-                  {owner.surname} {owner.name}
+                  {owner.surname} {owner.name} {owner.lastname}
                 </Select.Option>
               ))}
             </Select>
@@ -163,59 +162,10 @@ function AddRepairEq() {
             wrapperCol={{ span: 24 }}
             className="formLabel"
             name="req_status"
-            label="Состояние"
+            initialValue="Принято"
           >
-            <Select className="inputField">
-              <Select.Option value="Принято">Принято</Select.Option>
-              <Select.Option value="В процессе">В процессе</Select.Option>
-              <Select.Option value="Выполнено">Выполнено</Select.Option>
-            </Select>
+            <Input type="hidden" />
           </Form.Item>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              name="reg_date"
-              label="Дата регистрации"
-            >
-              <DatePicker
-                format="YYYY-MM-DD"
-                className="inputField"
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-            <div style={{ display: 'grid', placeItems: 'center', flex: 1 }}>
-              <Space direction="vertical" size={16}>
-                <Form.Item
-                  labelCol={{ span: 24 }}
-                  wrapperCol={{ span: 24 }}
-                  className="formLabel"
-                  name="req_acc_date"
-                  label="Дата принятия"
-                >
-                  <DatePicker
-                    format="YYYY-MM-DD"
-                    className="inputField"
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Space>
-            </div>
-            <Form.Item
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              className="formLabel"
-              name="req_cmp_date"
-              label="Дата выполнения"
-            >
-              <DatePicker
-                format="YYYY-MM-DD"
-                className="inputField"
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </div>
           <Form.Item className="d-flex justify-content-center">
             <Button type="primary" htmlType="submit">
               Submit

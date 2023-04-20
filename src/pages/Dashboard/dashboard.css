@@ -16,3 +16,8 @@
   font-size: 1.2rem;
   margin-bottom: 10px;
 }
+
+.mainPNG img {
+  max-width: 80%;
+  height: auto;
+}

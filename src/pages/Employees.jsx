@@ -6,7 +6,7 @@ import {
   Space,
   Form,
   Input,
-  message,
+  notification,
   Modal,
   Select,
 } from 'antd';
@@ -15,7 +15,6 @@ import { CSVLink } from 'react-csv';
 import { Layout } from 'antd';
 import axios from 'axios';
 import Spinner from '../components/Spinner/Spinner';
-import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
@@ -25,19 +24,18 @@ function Employee() {
   const [editRowKey, setEditRowKey] = useState('');
   const [workplaces, setWorkplaces] = useState([]);
   const [form] = Form.useForm();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
     axios
-      .get('https://autovaq.herokuapp.com/api/employee/', {
+      .get('https://autovaq.herokuapp.com/api/every/', {
         headers: {
           Authorization: `Token ${token}`,
         },
       })
       .then(res => {
-        setDataSource(res.data);
+        setDataSource(res.data.sort((a, b) => a.id - b.id));
         setLoading(false);
       })
       .catch(err => {
@@ -49,7 +47,7 @@ function Employee() {
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/employee/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/every/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -99,17 +97,17 @@ function Employee() {
       if (index > -1) {
         const item = newData[index];
         // update the item with the new data
-        newData[index] = { ...item, ...row };
+        newData[index] = {
+          ...item,
+          ...row,
+          workplace_id: workplaces.find(w => w.workplace_name === row.workplace)
+            ?.id,
+        };
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/employee/${item.id}/`,
-            {
-              ...item,
-              workplace_id: workplaces.find(
-                w => w.workplace_name === row.workplace
-              )?.id,
-            },
+            `https://autovaq.herokuapp.com/api/every/${item.id}/`,
+            newData[index],
             {
               headers: {
                 Authorization: `Token ${token}`,
@@ -119,10 +117,10 @@ function Employee() {
           .then(res => {
             setDataSource(newData);
             setEditRowKey('');
-            message.success('Changes saved successfully');
+            notification.success('Changes saved successfully');
           })
           .catch(err => {
-            message.error(err);
+            notification.error(err);
           });
       }
     } catch (error) {
@@ -133,8 +131,9 @@ function Employee() {
   const edit = record => {
     form.setFieldsValue({
       ...record,
-      workplace: workplaces.find(w => w.id === record.workplace_id)
-        ?.workplace_name,
+      workplace: record.workplace_id
+        ? workplaces.find(w => w.id === record.workplace_id)?.workplace_name
+        : '',
     });
     setEditRowKey(record.id);
   };
@@ -166,7 +165,6 @@ function Employee() {
       title: 'Position',
       dataIndex: 'position',
       key: 'position',
-      editTable: true,
     },
     {
       title: 'Name',
@@ -188,8 +186,8 @@ function Employee() {
     },
     {
       title: 'Workplace',
-      dataIndex: 'workplace',
-      key: 'workplace',
+      dataIndex: 'workplace_id',
+      key: 'workplace_id',
       render: (_, record) => {
         return isEditing(record) ? (
           <Form.Item
@@ -208,8 +206,10 @@ function Employee() {
               ))}
             </Select>
           </Form.Item>
-        ) : (
+        ) : record.workplace_id !== null ? (
           record.workplace
+        ) : (
+          'N/A'
         );
       },
     },
@@ -303,6 +303,14 @@ function Employee() {
               {
                 required: true,
                 message: `Please Input ${title}!`,
+                validator: (_, value) => {
+                  if (value && value.trim().length === 0) {
+                    return Promise.reject(
+                      `${title} cannot be only whitespace!`
+                    );
+                  }
+                  return Promise.resolve();
+                },
               },
             ]}
           >
@@ -326,23 +334,6 @@ function Employee() {
             >
               <h1 style={{ marginLeft: 20, marginTop: 30 }}>Employee</h1>
               <Space>
-                <Button
-                  style={{
-                    marginTop: 15,
-                    backgroundColor: '#00B0FF',
-                    color: '#fff',
-                    width: 150,
-                    height: 40,
-                    borderRadius: 5,
-                    textTransform: 'uppercase',
-                    fontWeight: 'bold',
-                    letterSpacing: 1,
-                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  }}
-                  onClick={() => navigate('/add_emp')}
-                >
-                  Add New
-                </Button>
                 <Button
                   style={{
                     marginTop: 15,

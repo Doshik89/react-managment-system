@@ -9,11 +9,8 @@ import Register from '../pages/Register/register';
 import RepairEquip from '../pages/repairEquip';
 import CompEquip from '../pages/compEquip';
 import Employees from '../pages/Employees';
-import Positions from '../pages/Positions';
 import JobCatalog from '../pages/jobCatalog';
 import Login from '../pages/LoginPage/login';
-import AddPositionForm from '../components/AddNew/AddPositionForm';
-import AddEmployeeForm from '../components/AddNew/AddEmployeeForm';
 import AddCompEq from '../components/AddNew/AddCompEq';
 import AddRepairEq from '../components/AddNew/AddRepairEq';
 import SideMenu from '../components/SideMenu/side-menu';
@@ -55,8 +52,8 @@ function App() {
   }, [token]);
 
   useEffect(() => {
-    fetchRole();
-  }, [fetchRole]);
+    fetchRole(token);
+  }, [token, fetchRole, username]);
 
   return (
     <ContentRoute
@@ -72,19 +69,20 @@ function ContentRoute(props) {
   const [allowedRoutes, setAllowedRoutes] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     const fetchRole = async () => {
       try {
         const res = await axios.get(
           'https://autovaq.herokuapp.com/view-role/',
           {
             headers: {
-              Authorization: `Token ${localStorage.getItem('token')}`,
+              Authorization: `Token ${token}`,
             },
           }
         );
 
         // Set allowed routes based on the user's role
-        if (res.data.role === 'Employee') {
+        if (res.data.role === 'Employee' || res.data.role === 'SysAdmin') {
           setAllowedRoutes([
             '/',
             '/home',
@@ -94,18 +92,15 @@ function ContentRoute(props) {
             '/add_rep_eq',
           ]);
         } else if (res.data.role === 'HR') {
-          setAllowedRoutes(['/', '/home', '/register']);
-        } else if (res.data.role === 'Admin' || res.data.role === 'SysAdmin') {
+          setAllowedRoutes(['/', '/home', '/register', '/job_catalogue']);
+        } else if (res.data.role === 'Admin') {
           setAllowedRoutes([
             '/',
             '/home',
             '/repair_app',
             '/computer_equip',
             '/employees',
-            '/positions',
             '/job_catalogue',
-            '/add_pos',
-            '/add_emp',
             '/add_comp_eq',
             '/add_rep_eq',
             '/register',
@@ -141,11 +136,8 @@ function ContentRoute(props) {
                   <Route path="/repair_app" element={<RepairEquip />}></Route>
                   <Route path="/computer_equip" element={<CompEquip />}></Route>
                   <Route path="/employees" element={<Employees />}></Route>
-                  <Route path="/positions" element={<Positions />}></Route>
                   <Route path="/job_catalogue" element={<JobCatalog />}></Route>
                   <Route path="/register" element={<Register />}></Route>
-                  <Route path="/add_pos" element={<AddPositionForm />}></Route>
-                  <Route path="/add_emp" element={<AddEmployeeForm />}></Route>
                   <Route path="/add_comp_eq" element={<AddCompEq />}></Route>
                   <Route path="/add_rep_eq" element={<AddRepairEq />}></Route>
                 </Routes>

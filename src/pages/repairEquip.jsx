@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   Popconfirm,
@@ -20,11 +20,38 @@ import { useNavigate } from 'react-router-dom';
 const { Content } = Layout;
 
 function RepairEquip() {
+  const [username, setUsername] = useState('');
+  const [dataFetched, setDataFetched] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('token');
+
+  const fetchRole = useCallback(async () => {
+    try {
+      const res = await axios.get('https://autovaq.herokuapp.com/view-role/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setUsername(res.data.role);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchRole(token);
+  }, [token, fetchRole, username]);
+
+  useEffect(() => {
+    fetchRole().then(() => {
+      setDataFetched(true);
+    });
+  }, [fetchRole]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -49,7 +76,7 @@ function RepairEquip() {
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/position/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/request/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -150,14 +177,14 @@ function RepairEquip() {
     {
       title: 'Employee ID',
       dataIndex: 'emp_id',
-      editTable: true,
+      editTable: false,
       key: '2',
       sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Sys ID',
       dataIndex: 'sys_id',
-      editTable: true,
+      editTable: false,
       key: '3',
       sorter: (a, b) => a.id - b.id,
     },
@@ -245,43 +272,65 @@ function RepairEquip() {
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
+        const isEmployee = username === 'Employee';
 
         return dataSource.length >= 1 ? (
           <Space key={record.id}>
-            <Button
-              type="primary"
-              disabled={editable}
-              onClick={() => handleView(record)}
-            >
-              <EyeOutlined className="d-flex align-content-center" />
-            </Button>
-            <Popconfirm
-              title="Are you sure want to delete?"
-              onConfirm={() => handleDelete(record)}
-            >
-              <Button danger type="primary" disabled={editable}>
-                <DeleteOutlined className="d-flex align-content-center" />
-              </Button>
-            </Popconfirm>
-            {editable ? (
-              <span>
-                <Space size="middle">
-                  <Button onClick={e => save(record.id)} type="primary">
-                    Save
-                  </Button>
-                  <Popconfirm title="Are you to cancel?" onConfirm={cancel}>
-                    <Button>Cancel</Button>
-                  </Popconfirm>
-                </Space>
-              </span>
+            {dataFetched ? (
+              <>
+                <Button
+                  type="primary"
+                  disabled={editable}
+                  onClick={() => handleView(record)}
+                  style={{ maxWidth: '50px' }}
+                >
+                  <EyeOutlined className="d-flex align-content-center" />
+                </Button>
+                {!isEmployee && (
+                  <>
+                    <Popconfirm
+                      title="Are you sure want to delete?"
+                      onConfirm={() => handleDelete(record)}
+                    >
+                      <Button danger type="primary" disabled={editable}>
+                        <DeleteOutlined className="d-flex align-content-center" />
+                      </Button>
+                    </Popconfirm>
+                    {editable ? (
+                      <span>
+                        <Space size="middle">
+                          <Button onClick={e => save(record.id)} type="primary">
+                            Save
+                          </Button>
+                          <Popconfirm
+                            title="Are you to cancel?"
+                            onConfirm={cancel}
+                          >
+                            <Button>Cancel</Button>
+                          </Popconfirm>
+                        </Space>
+                      </span>
+                    ) : (
+                      <Button
+                        onClick={() => edit(record)}
+                        type="primary"
+                        style={{ background: '#5ccf51', maxWidth: '50px' }}
+                      >
+                        <EditOutlined className="d-flex align-content-center" />
+                      </Button>
+                    )}
+                  </>
+                )}
+              </>
             ) : (
               <Button
-                onClick={() => edit(record)}
                 type="primary"
-                style={{ background: '#5ccf51' }}
+                style={{ background: '#808080', maxWidth: '50px' }}
               >
-                <EditOutlined className="d-flex align-content-center" />
-              </Button>
+                {'\u00A0'}
+                {'\u00A0'}
+                {'\u00A0'}
+              </Button> // replace this with your loader component
             )}
           </Space>
         ) : null;

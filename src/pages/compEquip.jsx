@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   Popconfirm,
@@ -6,9 +6,10 @@ import {
   Space,
   Form,
   Input,
+  Select,
   Tag,
-  message,
   Modal,
+  notification,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
@@ -20,11 +21,32 @@ import { useNavigate } from 'react-router-dom';
 const { Content } = Layout;
 
 function CompEquip() {
+  const [username, setUsername] = useState('');
   const [dataSource, setDataSource] = useState([]);
+  const [dataFetched, setDataFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('token');
+
+  const fetchRole = useCallback(async () => {
+    try {
+      const res = await axios.get('https://autovaq.herokuapp.com/view-role/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setUsername(res.data.role);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchRole(token);
+  }, [token, fetchRole, username]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -45,6 +67,12 @@ function CompEquip() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    fetchRole().then(() => {
+      setDataFetched(true);
+    });
+  }, [fetchRole]);
 
   const handleDelete = value => {
     const token = localStorage.getItem('token');
@@ -115,10 +143,15 @@ function CompEquip() {
             newData.splice(index, 1, { ...item, ...row });
             setDataSource(newData);
             setEditRowKey('');
-            message.success('Changes saved successfully');
+            notification.success({
+              message: 'Changes saved successfully',
+            });
           })
           .catch(err => {
-            message.error(err);
+            notification.error({
+              message: 'Changes were not saved',
+              description: 'Please try again later',
+            });
           });
       }
     } catch (error) {
@@ -169,67 +202,123 @@ function CompEquip() {
       title: 'Status',
       dataIndex: 'condition',
       key: 'condition',
-      editTable: true,
       align: 'center',
-      render: tag => {
-        const color = tag.includes('Снято с учета')
-          ? 'orange'
-          : tag.includes('Свободное')
-          ? 'blue'
-          : tag.includes('На рабочем месте')
-          ? 'green'
-          : 'red';
-        return (
-          <Tag color={color} key={tag}>
-            {tag}
+      render: (text, record) => {
+        const editable = isEditing(record);
+        let tagColor = '';
+        switch (text) {
+          case 'Снято с учета':
+            tagColor = 'blue';
+            break;
+          case 'Свободное':
+            tagColor = 'orange';
+            break;
+          case 'На рабочем месте':
+            tagColor = 'green';
+            break;
+          case 'В ремонте':
+            tagColor = 'purple';
+            break;
+          default:
+            tagColor = 'gray';
+        }
+        return editable ? (
+          <Form.Item
+            name="condition"
+            style={{ margin: 0 }}
+            rules={[{ required: true, message: 'Please select a status' }]}
+          >
+            <Select>
+              <Select.Option value="Снято с учета">Снято с учета</Select.Option>
+              <Select.Option value="Свободное">Свободное</Select.Option>
+              <Select.Option value="На рабочем месте">
+                На рабочем месте
+              </Select.Option>
+              <Select.Option value="В ремонте">В ремонте</Select.Option>
+            </Select>
+          </Form.Item>
+        ) : (
+          <Tag color={tagColor}>
+            {text.includes('Снято с учета')
+              ? 'Снято с учета'
+              : text.includes('Свободное')
+              ? 'Свободное'
+              : text.includes('На рабочем месте')
+              ? 'На рабочем месте'
+              : text.includes('В ремонте')
+              ? 'В ремонте'
+              : ''}
           </Tag>
         );
       },
+      editable: true, // set editable to true for the status column
     },
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'id',
+      key: '10',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
+        const isEmployee = username === 'Employee';
 
         return dataSource.length >= 1 ? (
           <Space key={record.id}>
-            <Button
-              type="primary"
-              disabled={editable}
-              onClick={() => handleView(record)}
-            >
-              <EyeOutlined className="d-flex align-content-center" />
-            </Button>
-            <Popconfirm
-              title="Are you sure want to delete?"
-              onConfirm={() => handleDelete(record)}
-            >
-              <Button danger type="primary" disabled={editable}>
-                <DeleteOutlined className="d-flex align-content-center" />
-              </Button>
-            </Popconfirm>
-            {editable ? (
-              <span>
-                <Space size="middle">
-                  <Button onClick={e => save(record.id)} type="primary">
-                    Save
-                  </Button>
-                  <Popconfirm title="Are you to cancel?" onConfirm={cancel}>
-                    <Button>Cancel</Button>
-                  </Popconfirm>
-                </Space>
-              </span>
+            {dataFetched ? (
+              <>
+                <Button
+                  type="primary"
+                  disabled={editable}
+                  onClick={() => handleView(record)}
+                  style={{ maxWidth: '50px' }}
+                >
+                  <EyeOutlined className="d-flex align-content-center" />
+                </Button>
+                {!isEmployee && (
+                  <>
+                    <Popconfirm
+                      title="Are you sure want to delete?"
+                      onConfirm={() => handleDelete(record)}
+                    >
+                      <Button danger type="primary" disabled={editable}>
+                        <DeleteOutlined className="d-flex align-content-center" />
+                      </Button>
+                    </Popconfirm>
+                    {editable ? (
+                      <span>
+                        <Space size="middle">
+                          <Button onClick={e => save(record.id)} type="primary">
+                            Save
+                          </Button>
+                          <Popconfirm
+                            title="Are you to cancel?"
+                            onConfirm={cancel}
+                          >
+                            <Button>Cancel</Button>
+                          </Popconfirm>
+                        </Space>
+                      </span>
+                    ) : (
+                      <Button
+                        onClick={() => edit(record)}
+                        type="primary"
+                        style={{ background: '#5ccf51', maxWidth: '50px' }}
+                      >
+                        <EditOutlined className="d-flex align-content-center" />
+                      </Button>
+                    )}
+                  </>
+                )}
+              </>
             ) : (
               <Button
-                onClick={() => edit(record)}
                 type="primary"
-                style={{ background: '#5ccf51' }}
+                style={{ background: '#808080', maxWidth: '50px' }}
               >
-                <EditOutlined className="d-flex align-content-center" />
-              </Button>
+                {'\u00A0'}
+                {'\u00A0'}
+                {'\u00A0'}
+              </Button> // replace this with your loader component
             )}
           </Space>
         ) : null;

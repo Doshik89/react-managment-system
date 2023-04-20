@@ -3,7 +3,6 @@ import {
   HomeOutlined,
   DesktopOutlined,
   FormOutlined,
-  UserOutlined,
   UserAddOutlined,
   ReadOutlined,
 } from '@ant-design/icons';
@@ -56,13 +55,12 @@ const SideMenu = () => {
       getItem('Repair requests', '/repair_app', <FormOutlined />),
       getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
       getItem('Employee', '/employees', <TeamOutlined />),
-      getItem('Positions', '/positions', <UserOutlined />),
       getItem('Job catalogue', '/job_catalogue', <ReadOutlined />),
       getItem('Registration', '/register', <UserAddOutlined />),
     ];
     if (username === '') {
       return [];
-    } else if (username === 'Employee') {
+    } else if (username === 'Employee' || username === 'SysAdmin') {
       return [
         getItem('Home', '/', <HomeOutlined />),
         getItem('Repair requests', '/repair_app', <FormOutlined />),
@@ -71,6 +69,7 @@ const SideMenu = () => {
     } else if (username === 'HR') {
       return [
         getItem('Home', '/', <HomeOutlined />),
+        getItem('Job catalogue', '/job_catalogue', <ReadOutlined />),
         getItem('Registration', '/register', <UserAddOutlined />),
       ];
     } else {
