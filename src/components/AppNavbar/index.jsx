@@ -14,8 +14,11 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-dark sticky-top flex-md-nowrap p-0 navbar-shadow">
-      <a className="navbar-brand col-md-3 col-lg-2 me-0 px-1" href="/">
-        <img className="logo" src={logo} alt="Logo" />
+      <a
+        className="navbar-brand  col-lg-2 col-md-3 col-sm-4 col-5 me-0 px-1"
+        href="/"
+      >
+        <img width="100" className="logo" src={logo} alt="Logo" />
       </a>
       <div className="navbar-nav d-flex flex-wrap">
         <div className="d-flex align-items-center btn-outline">

@@ -6,26 +6,28 @@ import {
   Space,
   Form,
   Input,
-  Select,
   Tag,
+  Select,
   Modal,
-  notification,
+  Skeleton,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import axios from 'axios';
-import Spinner from '../components/Spinner/Spinner';
 import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-function CompEquip() {
+function RepairEquip() {
   const [username, setUsername] = useState('');
-  const [dataSource, setDataSource] = useState([]);
   const [dataFetched, setDataFetched] = useState(false);
+  const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
+  const [sysAdmin, setSysAdmin] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -49,10 +51,33 @@ function CompEquip() {
   }, [token, fetchRole, username]);
 
   useEffect(() => {
+    fetchRole().then(() => {
+      setDataFetched(true);
+    });
+  }, [fetchRole]);
+
+  const fetchSysAdmin = useCallback(async () => {
+    try {
+      const res = await axios.get('https://autovaq.herokuapp.com/api/sysadm/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setSysAdmin(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchSysAdmin();
+  }, [fetchSysAdmin]);
+
+  useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
     axios
-      .get('https://autovaq.herokuapp.com/api/computer/', {
+      .get('https://autovaq.herokuapp.com/api/request/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -68,16 +93,10 @@ function CompEquip() {
       });
   }, []);
 
-  useEffect(() => {
-    fetchRole().then(() => {
-      setDataFetched(true);
-    });
-  }, [fetchRole]);
-
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/computer/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/request/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -89,6 +108,15 @@ function CompEquip() {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const handleSearch = value => {
+    setSearchText(value);
+    const newData = dataSource.filter(item => {
+      const name = `${item.reg_date} ${item.reg_acc_date} ${item.req_cmp_date}`;
+      return name.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredData(newData);
   };
 
   const handleView = record => {
@@ -129,7 +157,7 @@ function CompEquip() {
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/computer/${item.id}/`,
+            `https://autovaq.herokuapp.com/api/request/${item.id}/`,
             {
               ...row,
             },
@@ -162,91 +190,131 @@ function CompEquip() {
   const edit = record => {
     form.setFieldsValue({
       ...record,
+      emp_id: record.emp_id || '',
+      sys_id: record.sys_id || '',
     });
     setEditRowKey(record.id);
   };
 
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       key: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Employee',
-      dataIndex: 'owner',
-      key: 'owner',
+      title: 'Employee ID',
+      dataIndex: 'emp_id',
+      editTable: false,
+      key: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Equipment name',
-      dataIndex: 'device_name',
-      key: 'device_name',
+      title: 'Sys Admin ID',
+      dataIndex: 'sys_id',
+      key: 'id',
+      sorter: (a, b) => a.sys_id - b.sys_id, // compare sys_id instead of id
+      render: (text, record) => {
+        const editable = isEditing(record); // make sure the editable function is defined
+        return editable ? (
+          <Form.Item
+            name="sys_id"
+            style={{ margin: 0 }}
+            rules={[{ required: true, message: 'Please select a Sys Admin' }]}
+            initialValue={record.sys_id} // set the initial value to the current sys_id value
+          >
+            <Select>
+              {sysAdmin.map(sysAdmin => (
+                <Select.Option key={sysAdmin.id} value={sysAdmin.id}>
+                  {sysAdmin.name} {sysAdmin.surname} {sysAdmin.lastname}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        ) : (
+          text // display the sys_id value if not editable
+        );
+      },
+      editable: true, // set editable to true for the sys_id column
     },
     {
-      title: 'Arrival date',
-      dataIndex: 'arrival_date',
-      key: 'arrival_date',
+      title: 'Equipment ID',
+      dataIndex: 'computer',
+      editTable: false,
+      key: 'id',
     },
     {
-      title: 'Date of deletion',
-      dataIndex: 'deletion_date',
-      key: 'deletion_date',
+      title: 'Date of registration',
+      dataIndex: 'reg_date',
+      editTable: false,
+      key: 'id',
+      render: date =>
+        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
+    },
+    {
+      title: 'Date of acceptance',
+      dataIndex: 'reg_acc_date',
+      editTable: false,
+      key: 'id',
+      render: date =>
+        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
+    },
+    {
+      title: 'Date of completion',
+      dataIndex: 'req_cmp_date',
+      editTable: false,
+      key: 'id',
+      render: date =>
+        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
     },
     {
       title: 'Note',
-      dataIndex: 'notes',
-      key: 'notes',
+      dataIndex: 'req_desc',
+      editTable: true,
+      key: 'id',
     },
     {
       title: 'Status',
-      dataIndex: 'condition',
-      key: 'condition',
+      dataIndex: 'req_status',
+      key: 'id',
       align: 'center',
       render: (text, record) => {
         const editable = isEditing(record);
         let tagColor = '';
         switch (text) {
-          case 'Снято с учета':
+          case 'Принято':
             tagColor = 'blue';
             break;
-          case 'Свободное':
+          case 'В процессе':
             tagColor = 'orange';
             break;
-          case 'На рабочем месте':
+          case 'Выполнено':
             tagColor = 'green';
-            break;
-          case 'В ремонте':
-            tagColor = 'purple';
             break;
           default:
             tagColor = 'gray';
         }
         return editable ? (
           <Form.Item
-            name="condition"
+            name="req_status"
             style={{ margin: 0 }}
             rules={[{ required: true, message: 'Please select a status' }]}
           >
             <Select>
-              <Select.Option value="Снято с учета">Снято с учета</Select.Option>
-              <Select.Option value="Свободное">Свободное</Select.Option>
-              <Select.Option value="На рабочем месте">
-                На рабочем месте
-              </Select.Option>
-              <Select.Option value="В ремонте">В ремонте</Select.Option>
+              <Select.Option value="Принято">Принято</Select.Option>
+              <Select.Option value="В процессе">В процессе</Select.Option>
+              <Select.Option value="Выполнено">Выполнено</Select.Option>
             </Select>
           </Form.Item>
         ) : (
           <Tag color={tagColor}>
-            {text.includes('Снято с учета')
-              ? 'Снято с учета'
-              : text.includes('Свободное')
-              ? 'Свободное'
-              : text.includes('На рабочем месте')
-              ? 'На рабочем месте'
-              : text.includes('В ремонте')
-              ? 'В ремонте'
+            {text.includes('Принято')
+              ? 'Принято'
+              : text.includes('В процессе')
+              ? 'В процессе'
+              : text.includes('Выполнено')
+              ? 'Выполнено'
               : ''}
           </Tag>
         );
@@ -256,7 +324,7 @@ function CompEquip() {
     {
       title: 'Action',
       dataIndex: 'action',
-      key: '10',
+      key: 'id',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
@@ -386,9 +454,7 @@ function CompEquip() {
               className="d-flex justify-content-between"
               style={{ marginBottom: 20 }}
             >
-              <h1 style={{ marginLeft: 20, marginTop: 30 }}>
-                Computer equipment
-              </h1>
+              <h1 style={{ marginLeft: 20, marginTop: 30 }}>Repair requests</h1>
               <Space>
                 <Button
                   style={{
@@ -403,7 +469,7 @@ function CompEquip() {
                     letterSpacing: 1,
                     boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                   }}
-                  onClick={() => navigate('/add_comp_eq')}
+                  onClick={() => navigate('/add_rep_eq')}
                 >
                   Add New
                 </Button>
@@ -433,12 +499,17 @@ function CompEquip() {
               style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
             ></Space>
             <Form form={form} component={false}>
-              {loading ? (
-                <Spinner />
-              ) : (
+              <Skeleton loading={loading} active>
+                <Input.Search
+                  placeholder="Search by name"
+                  value={searchText}
+                  onChange={e => handleSearch(e.target.value)}
+                />
                 <Table
                   loading={loading}
-                  dataSource={dataSource}
+                  dataSource={
+                    filteredData.length > 0 ? filteredData : dataSource
+                  }
                   columns={mergedColumns}
                   bordered
                   responsive
@@ -448,7 +519,7 @@ function CompEquip() {
                     },
                   }}
                 />
-              )}
+              </Skeleton>
             </Form>
           </div>
         </Content>
@@ -457,4 +528,4 @@ function CompEquip() {
   );
 }
 
-export default CompEquip;
+export default RepairEquip;

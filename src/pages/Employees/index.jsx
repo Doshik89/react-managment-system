@@ -9,12 +9,12 @@ import {
   notification,
   Modal,
   Select,
+  Skeleton,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import { Layout } from 'antd';
 import axios from 'axios';
-import Spinner from '../components/Spinner/Spinner';
 
 const { Content } = Layout;
 
@@ -23,6 +23,8 @@ function Employee() {
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [workplaces, setWorkplaces] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -59,6 +61,15 @@ function Employee() {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const handleSearch = value => {
+    setSearchText(value);
+    const newData = dataSource.filter(item => {
+      const name = `${item.name} ${item.surname} ${item.lastname}`;
+      return name.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredData(newData);
   };
 
   const handleView = record => {
@@ -164,30 +175,30 @@ function Employee() {
     {
       title: 'Position',
       dataIndex: 'position',
-      key: 'position',
+      key: 'id',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+      key: 'id',
       editTable: true,
     },
     {
       title: 'Surname',
       dataIndex: 'surname',
-      key: 'surname',
+      key: 'id',
       editTable: true,
     },
     {
       title: 'Lastname',
       dataIndex: 'lastname',
-      key: 'lastname',
+      key: 'id',
       editTable: true,
     },
     {
       title: 'Workplace',
       dataIndex: 'workplace_id',
-      key: 'workplace_id',
+      key: 'id',
       render: (_, record) => {
         return isEditing(record) ? (
           <Form.Item
@@ -208,6 +219,9 @@ function Employee() {
           </Form.Item>
         ) : record.workplace_id !== null ? (
           record.workplace
+        ) : record.workplace_id !== null &&
+          record.workplace_id !== undefined ? (
+          record.workplace
         ) : (
           'N/A'
         );
@@ -216,7 +230,7 @@ function Employee() {
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'action',
+      key: 'id',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
@@ -355,17 +369,18 @@ function Employee() {
               </Space>
             </Space>
 
-            <Space
-              className="d-flex justify-content-center"
-              style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
-            ></Space>
             <Form form={form} component={false}>
-              {loading ? (
-                <Spinner />
-              ) : (
+              <Skeleton loading={loading} active>
+                <Input.Search
+                  placeholder="Search by name"
+                  value={searchText}
+                  onChange={e => handleSearch(e.target.value)}
+                />
                 <Table
                   loading={loading}
-                  dataSource={dataSource}
+                  dataSource={
+                    filteredData.length > 0 ? filteredData : dataSource
+                  }
                   columns={mergedColumns}
                   bordered
                   responsive
@@ -375,7 +390,7 @@ function Employee() {
                     },
                   }}
                 />
-              )}
+              </Skeleton>
             </Form>
           </div>
         </Content>

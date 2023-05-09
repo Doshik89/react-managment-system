@@ -18,18 +18,20 @@
   border-radius: 16px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
-.leftSide {
+
+.left-side {
+  padding: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.rightSide {
+.right-side {
   background-color: #18358c;
   border-radius: 0 14px 14px 0;
 }
 
-.loginForm {
+.login-form {
   width: 350px;
 
   background-color: rgb(255, 255, 255, 0.33);
@@ -40,7 +42,7 @@
   border-radius: 15px;
 }
 
-.logTitle {
+.login-title {
   text-align: center;
   padding-bottom: 20px;
 }
@@ -51,17 +53,17 @@ img {
 }
 
 @media (max-width: 992px) {
-  .rightSide {
+  .right-side {
     display: none;
   }
 
-  .loginForm {
+  .login-form {
     margin: 30px 0 30px 0;
   }
 }
 
 @media (max-width: 1200px) {
-  .leftSide {
+  .left-side {
     display: flex;
     justify-content: center;
     align-items: center;

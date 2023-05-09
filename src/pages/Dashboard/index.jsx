@@ -10,7 +10,7 @@ import mainPNG5 from '../../resources/img/mainPage/mainPNG5.png';
 
 const { Content } = Layout;
 
-const MainTitle = () => {
+const Dashboard = () => {
   const [username, setUsername] = useState('');
 
   const images = useMemo(
@@ -24,22 +24,23 @@ const MainTitle = () => {
 
   const token = localStorage.getItem('token');
 
-  const fetchRole = useCallback(async () => {
+  const fetchUsername = useCallback(async () => {
     try {
-      const res = await axios.get('https://autovaq.herokuapp.com/view-role/', {
+      const res = await axios.get('https://autovaq.herokuapp.com/profile/', {
         headers: {
           Authorization: `Token ${token}`,
         },
       });
-      setUsername(res.data.role);
+      const fullName = `${res.data[0].fields.name} ${res.data[0].fields.surname}`;
+      setUsername(fullName);
     } catch (error) {
       console.error(error);
     }
   }, [token]);
 
   useEffect(() => {
-    fetchRole();
-  }, [fetchRole]);
+    fetchUsername();
+  }, [fetchUsername]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -73,4 +74,4 @@ const MainTitle = () => {
   );
 };
 
-export default MainTitle;
+export default Dashboard;

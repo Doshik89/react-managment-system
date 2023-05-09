@@ -214,9 +214,9 @@ function Register() {
                   label="Role"
                 >
                   <Select placeholder="Choose a role">
-                    <Select.Option value="Admin">Admin</Select.Option>
-                    <Select.Option value="Employee">Employee</Select.Option>
-                    <Select.Option value="SysAdmin">SysAdmin</Select.Option>
+                    <Select.Option value="Админ">Админ</Select.Option>
+                    <Select.Option value="Сотрудник">Сотрудник</Select.Option>
+                    <Select.Option value="Сисадмин">Сисадмин</Select.Option>
                     <Select.Option value="HR">HR</Select.Option>
                   </Select>
                 </Form.Item>

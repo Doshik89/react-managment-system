@@ -5,10 +5,11 @@ import {
   FormOutlined,
   UserAddOutlined,
   ReadOutlined,
+  BarChartOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Avatar } from 'antd';
 import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './side-menu.css';
 
@@ -24,7 +25,9 @@ function getItem(label, key, icon, children) {
 }
 
 const SideMenu = () => {
-  const [username, setUsername] = useState('');
+  const [userRole, setUserRole] = useState('');
+  const [userName, setUserName] = useState('');
+  const [avaColor, setAvaColor] = useState('');
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -41,12 +44,44 @@ const SideMenu = () => {
             },
           }
         );
-        setUsername(res.data.role);
+        setUserRole(res.data.role);
       } catch (error) {
         console.error(error);
       }
     };
     fetchRole();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const res = await axios.get('https://autovaq.herokuapp.com/profile/', {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setUserName(res.data[0].fields.name);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserName();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchAvatarColor = async () => {
+      try {
+        const res = await axios.get('https://autovaq.herokuapp.com/profile/', {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setAvaColor(res.data[0].fields.avatarColor);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchAvatarColor();
   }, [token]);
 
   const items = useMemo(() => {
@@ -57,16 +92,17 @@ const SideMenu = () => {
       getItem('Employee', '/employees', <TeamOutlined />),
       getItem('Job catalogue', '/job_catalogue', <ReadOutlined />),
       getItem('Registration', '/register', <UserAddOutlined />),
+      getItem('Performance Graph', '/performance_chart', <BarChartOutlined />),
     ];
-    if (username === '') {
+    if (userRole === '') {
       return [];
-    } else if (username === 'Employee' || username === 'SysAdmin') {
+    } else if (userRole === 'Employee' || userRole === 'SysAdmin') {
       return [
         getItem('Home', '/', <HomeOutlined />),
         getItem('Repair requests', '/repair_app', <FormOutlined />),
         getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
       ];
-    } else if (username === 'HR') {
+    } else if (userRole === 'HR') {
       return [
         getItem('Home', '/', <HomeOutlined />),
         getItem('Job catalogue', '/job_catalogue', <ReadOutlined />),
@@ -75,7 +111,11 @@ const SideMenu = () => {
     } else {
       return baseItems;
     }
-  }, [username]);
+  }, [userRole]);
+
+  const siderStyle = {
+    background: '#00a1dc',
+  };
 
   return (
     <Sider
@@ -83,18 +123,40 @@ const SideMenu = () => {
       collapsed={collapsed}
       onCollapse={value => setCollapsed(value)}
       width={220}
-      style={{
-        background: '#00a1dc',
-        height: 'calc(100vh - 64px)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        width: '100%',
-        maxWidth: '220px',
-      }}
+      style={siderStyle}
     >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center', // add this line
+          marginTop: 15,
+          marginBottom: 15,
+        }}
+      >
+        <Link to="/profile">
+          <Avatar
+            style={{
+              backgroundColor: `${avaColor}`,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            size={{
+              xs: 24,
+              sm: 32,
+              md: 40,
+              lg: 64,
+              xl: 80,
+              xxl: 80,
+            }}
+          >
+            {userName}
+          </Avatar>
+        </Link>
+      </div>
       <Menu
-        className="sidebarMenu"
+        className="side-bar-menu"
         onClick={({ key }) => {
           navigate(key);
         }}

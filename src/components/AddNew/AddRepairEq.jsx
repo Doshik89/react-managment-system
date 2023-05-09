@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import {
-  Layout,
-  Form,
-  Input,
-  Button,
-  notification,
-  Typography,
-  Select,
-} from 'antd';
+import { Layout, Form, Input, Button, notification, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
 
@@ -23,46 +15,49 @@ function AddRepairEq() {
 
   const token = localStorage.getItem('token');
 
-  const fetchOwners = useCallback(async () => {
-    try {
-      const res = await axios.get(
-        'https://autovaq.herokuapp.com/api/employee/',
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      );
-      setOwner(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [token]);
-
-  const fetchComputer = useCallback(async () => {
-    try {
-      const res = await axios.get(
-        'https://autovaq.herokuapp.com/api/computer/',
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      );
-      setComputer(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [token]);
-
+  //Fetching owner from employee API
   useEffect(() => {
+    async function fetchOwners() {
+      try {
+        const res = await axios.get(
+          'https://autovaq.herokuapp.com/api/employee/',
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        setOwner(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     fetchOwners();
-  }, [fetchOwners]);
+  }, [token]);
 
+  //Fetching computer from computer API
   useEffect(() => {
-    fetchComputer();
-  }, [fetchComputer]);
+    async function fetchComputer() {
+      try {
+        const res = await axios.get(
+          'https://autovaq.herokuapp.com/api/computer/',
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        setComputer(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
+    fetchComputer();
+  }, [token]);
+
+  //onFinish function that validates fields, makes a POST request to a API
   const onFinish = useCallback(
     async values => {
       const requiredFields = ['req_desc'];
@@ -114,18 +109,15 @@ function AddRepairEq() {
     <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
       <div className="bodyAddNew">
         <Form className="FormAddNew" form={form} onFinish={onFinish}>
-          <Typography.Title className="logTitle">
-            {' '}
-            Заявки на ремонт
-          </Typography.Title>
+          <h1 className="logTitle">Repair requests</h1>
           <Form.Item
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             className="formLabel"
             name="emp_id"
-            label="Сотрудник"
+            label="Employee"
           >
-            <Select className="inputField">
+            <Select placeholder="Select your name" className="inputField">
               {owner.map(owner => (
                 <Select.Option key={owner.id} value={owner.id}>
                   {owner.surname} {owner.name} {owner.lastname}
@@ -138,9 +130,9 @@ function AddRepairEq() {
             wrapperCol={{ span: 24 }}
             className="formLabel"
             name="computer"
-            label="Оборудование"
+            label="Equipment"
           >
-            <Select className="inputField">
+            <Select placeholder="Select your equipment" className="inputField">
               {computer.map(computer => (
                 <Select.Option key={computer.id} value={computer.id}>
                   {computer.device_name}
@@ -153,9 +145,13 @@ function AddRepairEq() {
             wrapperCol={{ span: 24 }}
             className="formLabel"
             name="req_desc"
-            label="Содержание"
+            label="Note"
           >
-            <Input.TextArea style={{ height: 50 }} className="inputField" />
+            <Input.TextArea
+              placeholder="Enter a note"
+              style={{ height: 50 }}
+              className="inputField"
+            />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 24 }}

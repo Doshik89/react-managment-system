@@ -52,15 +52,15 @@ const Login = () => {
 
   return (
     <div className="body">
-      <div className="logBG container ">
+      <div className="container">
         <div className="row g-0">
-          <div className="leftSide col-lg-5">
+          <div className="left-side col-lg-5">
             <Form
-              className="loginForm"
+              className="login-form"
               onFinish={handleSubmit}
               autocomplete="on"
             >
-              <Typography.Title className="logTitle">
+              <Typography.Title className="login-title">
                 InControll
               </Typography.Title>
               <Form.Item
@@ -128,7 +128,7 @@ const Login = () => {
               </Form.Item>
             </Form>
           </div>
-          <div className="rightSide col-lg-7">
+          <div className="right-side col-lg-7">
             <img className="img-fluid" src={teamImg} alt="team" />
           </div>
         </div>

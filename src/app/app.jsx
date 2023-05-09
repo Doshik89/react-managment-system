@@ -1,59 +1,60 @@
 import './app.css';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import MainTitle from '../pages/Dashboard/dashboard';
-import Register from '../pages/Register/register';
-import RepairEquip from '../pages/repairEquip';
-import CompEquip from '../pages/compEquip';
+import MainTitle from '../pages/Dashboard/';
+import Register from '../pages/Register';
+import RepairEquip from '../pages/RepairRequest';
+import CompEquip from '../pages/ComputerEquipment';
 import Employees from '../pages/Employees';
-import JobCatalog from '../pages/jobCatalog';
-import Login from '../pages/LoginPage/login';
+import JobCatalog from '../pages/JobCatalog';
+import Login from '../pages/LoginPage';
 import AddCompEq from '../components/AddNew/AddCompEq';
 import AddRepairEq from '../components/AddNew/AddRepairEq';
-import SideMenu from '../components/SideMenu/side-menu';
-import Navbar from '../components/AppNavbar/navbar';
-import NotFound from '../components/NotFound/NotFound';
-import Spinner from '../components/Spinner/Spinner';
+import AddJob from '../components/AddNew/AddJob';
+import SideMenu from '../components/SideMenu';
+import Navbar from '../components/AppNavbar';
+import Profile from '../components/Profile';
+import PerformanceChart from '../components/PerformanceChart';
+import NotFound from '../components/NotFound';
+import Spinner from '../components/Loaders/Spinner';
+
+const API_URL = 'https://autovaq.herokuapp.com';
 
 function App() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const currentPath = window.location.pathname;
 
     if (!token || token === 'undefined' || token === 'null') {
       navigate('/login');
-      setIsLoading(false); // set loading state to false if on /login page
+      setIsLoading(false);
     } else if (currentPath === '/login') {
       navigate('/');
-      setIsLoading(false); // set loading state to false if on /login page
+      setIsLoading(false);
+    } else {
+      const fetchRole = async () => {
+        try {
+          const res = await axios.get(`${API_URL}/view-role/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+          setUsername(res.data.role);
+          setIsLoading(false);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchRole();
     }
-  }, [navigate]);
-
-  const fetchRole = useCallback(async () => {
-    try {
-      const res = await axios.get('https://autovaq.herokuapp.com/view-role/', {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-      setUsername(res.data.role);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchRole(token);
-  }, [token, fetchRole, username]);
+  }, [navigate, token]);
 
   return (
     <ContentRoute
@@ -64,7 +65,7 @@ function App() {
   );
 }
 
-function ContentRoute(props) {
+function ContentRoute({ setIsLoading, isLoading }) {
   const location = useLocation();
   const [allowedRoutes, setAllowedRoutes] = useState([]);
 
@@ -72,51 +73,66 @@ function ContentRoute(props) {
     const token = localStorage.getItem('token');
     const fetchRole = async () => {
       try {
-        const res = await axios.get(
-          'https://autovaq.herokuapp.com/view-role/',
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_URL}/view-role/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
 
         // Set allowed routes based on the user's role
-        if (res.data.role === 'Employee' || res.data.role === 'SysAdmin') {
-          setAllowedRoutes([
-            '/',
-            '/home',
-            '/repair_app',
-            '/computer_equip',
-            '/add_comp_eq',
-            '/add_rep_eq',
-          ]);
-        } else if (res.data.role === 'HR') {
-          setAllowedRoutes(['/', '/home', '/register', '/job_catalogue']);
-        } else if (res.data.role === 'Admin') {
-          setAllowedRoutes([
-            '/',
-            '/home',
-            '/repair_app',
-            '/computer_equip',
-            '/employees',
-            '/job_catalogue',
-            '/add_comp_eq',
-            '/add_rep_eq',
-            '/register',
-          ]);
+        switch (res.data.role) {
+          case 'Employee':
+          case 'SysAdmin':
+            setAllowedRoutes([
+              '/',
+              '/home',
+              '/profile',
+              '/repair_app',
+              '/computer_equip',
+              '/add_comp_eq',
+              '/add_rep_eq',
+            ]);
+            break;
+          case 'HR':
+            setAllowedRoutes([
+              '/',
+              '/home',
+              '/register',
+              '/job_catalogue',
+              '/add_job',
+            ]);
+            break;
+          case 'Admin':
+            setAllowedRoutes([
+              '/',
+              '/home',
+              '/profile',
+              '/repair_app',
+              '/computer_equip',
+              '/employees',
+              '/job_catalogue',
+              '/add_comp_eq',
+              '/add_rep_eq',
+              '/add_job',
+              '/register',
+              '/performance_chart',
+            ]);
+            break;
+          default:
+            setAllowedRoutes([]);
+            break;
         }
 
-        props.setIsLoading(false);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchRole();
-  }, [props]);
+  }, [setIsLoading]);
 
-  if (props.isLoading) {
+  if (isLoading) {
     return <Spinner />;
   } else {
     const isRouteAllowed = allowedRoutes.includes(location.pathname);
@@ -126,11 +142,16 @@ function ContentRoute(props) {
         <div className="app">
           <Layout>
             <Navbar />
-            <Layout>
+            <Layout
+              style={{
+                minHeight: 'calc(100vh - 65px)',
+              }}
+            >
               <SideMenu />
               <Layout>
                 <Routes>
                   <Route path="/" element={<MainTitle />}></Route>
+                  <Route path="/profile" element={<Profile />}></Route>
                   <Route path="/login" element={<Login />}></Route>
                   <Route path="/home" element={<MainTitle />}></Route>
                   <Route path="/repair_app" element={<RepairEquip />}></Route>
@@ -140,6 +161,11 @@ function ContentRoute(props) {
                   <Route path="/register" element={<Register />}></Route>
                   <Route path="/add_comp_eq" element={<AddCompEq />}></Route>
                   <Route path="/add_rep_eq" element={<AddRepairEq />}></Route>
+                  <Route path="/add_job" element={<AddJob />}></Route>
+                  <Route
+                    path="/performance_chart"
+                    element={<PerformanceChart />}
+                  ></Route>
                 </Routes>
               </Layout>
             </Layout>

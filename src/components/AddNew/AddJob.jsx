@@ -1,44 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, notification, Select, Layout } from 'antd';
+import { Layout, Form, Input, Button, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
 
 const { useForm } = Form;
 
-function AddCompEq() {
+function AddJob() {
   const [form] = useForm();
   const [dataSource, setDataSource] = useState([]);
-  const [owner, setOwner] = useState([]);
   const navigate = useNavigate();
-
-  const token = localStorage.getItem('token');
-
-  //Fetching owner from employee API
-  useEffect(() => {
-    async function fetchOwners() {
-      try {
-        const res = await axios.get(
-          'https://autovaq.herokuapp.com/api/employee/',
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          }
-        );
-        setOwner(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchOwners();
-  }, [token]);
 
   //onFinish function that validates fields, makes a POST request to a API
   const onFinish = useCallback(
     async values => {
-      const requiredFields = ['device_name', 'notes'];
+      const requiredFields = ['workplace_name', 'cabinet'];
       try {
         for (const field of requiredFields) {
           const value = values[field];
@@ -57,7 +33,7 @@ function AddCompEq() {
 
         const token = localStorage.getItem('token');
         const res = await axios.post(
-          'https://autovaq.herokuapp.com/api/computer/',
+          'https://autovaq.herokuapp.com/api/job_catalogue/',
           data,
           {
             headers: {
@@ -69,14 +45,14 @@ function AddCompEq() {
         form.resetFields();
         notification.success({
           message: 'Success',
-          description: 'Computer equipment added successfully.',
+          description: 'Job added successfully.',
         });
-        navigate('/computer_equip');
+        navigate('/job_catalogue');
       } catch (err) {
         console.log(err);
         notification.error({
           message: 'Error',
-          description: 'Failed to add computer equipment.',
+          description: 'Failed to add job.',
         });
       }
     },
@@ -86,32 +62,18 @@ function AddCompEq() {
   return (
     <Layout style={{ minHeight: 'calc(100vh - 60px)' }}>
       <div className="bodyAddNew">
-        <h1>Computer equipment</h1>
         <Form className="FormAddNew" form={form} onFinish={onFinish}>
+          <h1 className="logTitle">Job Catalogue</h1>
           <Form.Item
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             className="formLabel"
-            name="owner"
-            label="Employee"
+            name="workplace_name"
+            label="Workplace name"
           >
-            <Select placeholder="Select your name" className="inputField">
-              {owner.map(owner => (
-                <Select.Option key={owner.id} value={owner.id}>
-                  {owner.name} {owner.surname} {owner.lastname}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="device_name"
-            label="Name of the equipment"
-          >
-            <Input
-              placeholder="Enter the name of the equipment"
+            <Input.TextArea
+              placeholder="Enter workplace name"
+              style={{ height: 50 }}
               className="inputField"
             />
           </Form.Item>
@@ -119,26 +81,15 @@ function AddCompEq() {
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             className="formLabel"
-            s
-            name="notes"
-            label="Note"
+            name="cabinet"
+            label="Cabinet/workshop"
           >
             <Input.TextArea
-              placeholder="Enter a note"
-              style={{ height: 100 }}
-              className="inputFieldNote"
+              placeholder="Enter cabinet 'Room - (1,2,3)'"
+              style={{ height: 50 }}
+              className="inputField"
             />
           </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            wrapperCol={{ span: 24 }}
-            className="formLabel"
-            name="condition"
-            initialValue="Свободное"
-          >
-            <Input type="hidden" />
-          </Form.Item>
-
           <Form.Item className="d-flex justify-content-center">
             <Button type="primary" htmlType="submit">
               Submit
@@ -150,4 +101,4 @@ function AddCompEq() {
   );
 }
 
-export default AddCompEq;
+export default AddJob;

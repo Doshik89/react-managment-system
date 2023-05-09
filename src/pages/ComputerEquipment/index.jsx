@@ -6,25 +6,29 @@ import {
   Space,
   Form,
   Input,
-  Tag,
   Select,
+  Tag,
   Modal,
+  notification,
+  Skeleton,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
-import { Layout, notification } from 'antd';
+import { Layout } from 'antd';
 import axios from 'axios';
-import Spinner from '../components/Spinner/Spinner';
 import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-function RepairEquip() {
+function CompEquip() {
   const [username, setUsername] = useState('');
-  const [dataFetched, setDataFetched] = useState(false);
+
   const [dataSource, setDataSource] = useState([]);
+  const [dataFetched, setDataFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -48,16 +52,10 @@ function RepairEquip() {
   }, [token, fetchRole, username]);
 
   useEffect(() => {
-    fetchRole().then(() => {
-      setDataFetched(true);
-    });
-  }, [fetchRole]);
-
-  useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
     axios
-      .get('https://autovaq.herokuapp.com/api/request/', {
+      .get('https://autovaq.herokuapp.com/api/computer/', {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -73,10 +71,16 @@ function RepairEquip() {
       });
   }, []);
 
+  useEffect(() => {
+    fetchRole().then(() => {
+      setDataFetched(true);
+    });
+  }, [fetchRole]);
+
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/request/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/computer/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -88,6 +92,15 @@ function RepairEquip() {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const handleSearch = value => {
+    setSearchText(value);
+    const newData = dataSource.filter(item => {
+      const name = `${item.device_name} ${item.arrival_date} ${item.deletion_date}`;
+      return name.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredData(newData);
   };
 
   const handleView = record => {
@@ -128,7 +141,7 @@ function RepairEquip() {
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/request/${item.id}/`,
+            `https://autovaq.herokuapp.com/api/computer/${item.id}/`,
             {
               ...row,
             },
@@ -161,104 +174,95 @@ function RepairEquip() {
   const edit = record => {
     form.setFieldsValue({
       ...record,
-      emp_id: record.emp_id || '',
-      sys_id: record.sys_id || '',
     });
     setEditRowKey(record.id);
   };
 
   const columns = [
     {
-      title: 'ID',
+      title: 'Id',
       dataIndex: 'id',
-      key: '1',
+      key: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Employee ID',
-      dataIndex: 'emp_id',
-      editTable: false,
-      key: '2',
-      sorter: (a, b) => a.id - b.id,
+      title: 'Employee',
+      dataIndex: 'owner',
+      key: 'id',
     },
     {
-      title: 'Sys ID',
-      dataIndex: 'sys_id',
-      editTable: false,
-      key: '3',
-      sorter: (a, b) => a.id - b.id,
+      title: 'Equipment name',
+      dataIndex: 'device_name',
+      key: 'id',
     },
     {
-      title: 'Equipment ID',
-      dataIndex: 'computer',
-      editTable: false,
-      key: '4',
+      title: 'Arrival date',
+      dataIndex: 'arrival_date',
+      key: 'id',
+      render: date =>
+        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
     },
     {
-      title: 'Date of registration',
-      dataIndex: 'reg_date',
-      editTable: false,
-      key: '5',
-    },
-    {
-      title: 'Date of acceptance',
-      dataIndex: 'req_acc_date',
-      editTable: false,
-      key: '6',
-    },
-    {
-      title: 'Date of completion',
-      dataIndex: 'req_cmp_date',
-      editTable: false,
-      key: '7',
+      title: 'Date of deletion',
+      dataIndex: 'deletion_date',
+      key: 'id',
+      render: date =>
+        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
     },
     {
       title: 'Note',
-      dataIndex: 'req_desc',
-      editTable: true,
-      key: '8',
+      dataIndex: 'notes',
+      key: 'id',
     },
     {
       title: 'Status',
-      dataIndex: 'req_status',
-      key: '9',
+      dataIndex: 'condition',
+      key: 'id',
       align: 'center',
       render: (text, record) => {
         const editable = isEditing(record);
         let tagColor = '';
         switch (text) {
-          case 'Принято':
+          case 'Снято с учета':
             tagColor = 'blue';
             break;
-          case 'В процессе':
+          case 'Свободное':
             tagColor = 'orange';
             break;
-          case 'Выполнено':
+          case 'На рабочем месте':
             tagColor = 'green';
+            break;
+          case 'В ремонте':
+            tagColor = 'purple';
             break;
           default:
             tagColor = 'gray';
         }
         return editable ? (
           <Form.Item
-            name="req_status"
+            name="condition"
             style={{ margin: 0 }}
             rules={[{ required: true, message: 'Please select a status' }]}
           >
             <Select>
-              <Select.Option value="Принято">Принято</Select.Option>
-              <Select.Option value="В процессе">В процессе</Select.Option>
-              <Select.Option value="Выполнено">Выполнено</Select.Option>
+              <Select.Option value="Снято с учета">Снято с учета</Select.Option>
+              <Select.Option value="Свободное">Свободное</Select.Option>
+              <Select.Option value="На рабочем месте">
+                На рабочем месте
+              </Select.Option>
+              <Select.Option value="В ремонте">В ремонте</Select.Option>
             </Select>
           </Form.Item>
         ) : (
           <Tag color={tagColor}>
-            {text.includes('Принято')
-              ? 'Принято'
-              : text.includes('В процессе')
-              ? 'В процессе'
-              : text.includes('Выполнено')
-              ? 'Выполнено'
+            {text.includes('Снято с учета')
+              ? 'Снято с учета'
+              : text.includes('Свободное')
+              ? 'Свободное'
+              : text.includes('На рабочем месте')
+              ? 'На рабочем месте'
+              : text.includes('В ремонте')
+              ? 'В ремонте'
               : ''}
           </Tag>
         );
@@ -268,7 +272,7 @@ function RepairEquip() {
     {
       title: 'Action',
       dataIndex: 'action',
-      key: '10',
+      key: 'id',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
@@ -398,7 +402,9 @@ function RepairEquip() {
               className="d-flex justify-content-between"
               style={{ marginBottom: 20 }}
             >
-              <h1 style={{ marginLeft: 20, marginTop: 30 }}>Repair requests</h1>
+              <h1 style={{ marginLeft: 20, marginTop: 30 }}>
+                Computer equipment
+              </h1>
               <Space>
                 <Button
                   style={{
@@ -413,7 +419,7 @@ function RepairEquip() {
                     letterSpacing: 1,
                     boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                   }}
-                  onClick={() => navigate('/add_rep_eq')}
+                  onClick={() => navigate('/add_comp_eq')}
                 >
                   Add New
                 </Button>
@@ -443,12 +449,17 @@ function RepairEquip() {
               style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
             ></Space>
             <Form form={form} component={false}>
-              {loading ? (
-                <Spinner />
-              ) : (
+              <Skeleton loading={loading} active>
+                <Input.Search
+                  placeholder="Search by name"
+                  value={searchText}
+                  onChange={e => handleSearch(e.target.value)}
+                />
                 <Table
                   loading={loading}
-                  dataSource={dataSource}
+                  dataSource={
+                    filteredData.length > 0 ? filteredData : dataSource
+                  }
                   columns={mergedColumns}
                   bordered
                   responsive
@@ -458,7 +469,7 @@ function RepairEquip() {
                     },
                   }}
                 />
-              )}
+              </Skeleton>
             </Form>
           </div>
         </Content>
@@ -467,4 +478,4 @@ function RepairEquip() {
   );
 }
 
-export default RepairEquip;
+export default CompEquip;

@@ -8,12 +8,12 @@ import {
   Input,
   message,
   Modal,
+  Skeleton,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 import { Layout } from 'antd';
 import axios from 'axios';
-import Spinner from '../components/Spinner/Spinner';
 import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
@@ -22,6 +22,8 @@ function JobCatalog() {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -59,6 +61,15 @@ function JobCatalog() {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const handleSearch = value => {
+    setSearchText(value);
+    const newData = dataSource.filter(item => {
+      const name = `${item.workplace_name} ${item.cabinet}`;
+      return name.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredData(newData);
   };
 
   const handleView = record => {
@@ -133,25 +144,25 @@ function JobCatalog() {
 
   const columns = [
     {
-      key: '1',
+      key: 'id',
       title: 'Id',
       dataIndex: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      key: '2',
+      key: 'id',
       title: 'Workplace Name',
       dataIndex: 'workplace_name',
       editTable: true,
     },
     {
-      key: '3',
+      key: 'id',
       title: 'Cabinet',
       dataIndex: 'cabinet',
       editTable: true,
     },
     {
-      key: '3',
+      key: 'id',
       title: 'Action',
       dataIndex: 'action',
       align: 'center',
@@ -276,7 +287,7 @@ function JobCatalog() {
                     letterSpacing: 1,
                     boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                   }}
-                  onClick={() => navigate('/add_pos')} //nado izmenit
+                  onClick={() => navigate('/add_job')} //nado izmenit
                 >
                   Add New
                 </Button>
@@ -306,12 +317,17 @@ function JobCatalog() {
               style={{ marginTop: 20, marginBottom: 20, marginLeft: 10 }}
             ></Space>
             <Form form={form} component={false}>
-              {loading ? (
-                <Spinner />
-              ) : (
+              <Skeleton loading={loading} active>
+                <Input.Search
+                  placeholder="Search by name"
+                  value={searchText}
+                  onChange={e => handleSearch(e.target.value)}
+                />
                 <Table
                   loading={loading}
-                  dataSource={dataSource}
+                  dataSource={
+                    filteredData.length > 0 ? filteredData : dataSource
+                  }
                   columns={mergedColumns}
                   bordered
                   responsive
@@ -321,7 +337,7 @@ function JobCatalog() {
                     },
                   }}
                 />
-              )}
+              </Skeleton>
             </Form>
           </div>
         </Content>
