@@ -9,6 +9,7 @@ import {
   Tooltip,
   Filler,
 } from 'chart.js';
+import { Skeleton } from 'antd';
 import { Bar } from 'react-chartjs-2';
 import './chart.css';
 
@@ -108,7 +109,7 @@ const ColumnDiagram = () => {
   };
 
   return (
-    <div>
+    <div className="chart-container">
       {data ? (
         <Bar
           key={data}
@@ -150,7 +151,7 @@ const ColumnDiagram = () => {
           }}
         />
       ) : (
-        <p>Loading...</p>
+        <Skeleton />
       )}
     </div>
   );

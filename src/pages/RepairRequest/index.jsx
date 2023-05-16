@@ -254,7 +254,7 @@ function RepairEquip() {
     },
     {
       title: 'Date of acceptance',
-      dataIndex: 'reg_acc_date',
+      dataIndex: 'req_acc_date',
       editTable: false,
       key: 'id',
       render: date =>

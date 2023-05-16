@@ -17,9 +17,11 @@ import AddJob from '../components/AddNew/AddJob';
 import SideMenu from '../components/SideMenu';
 import Navbar from '../components/AppNavbar';
 import Profile from '../components/Profile';
-import PerformanceChart from '../components/PerformanceChart';
+import PerformanceChart from '../pages/PerformanceChart';
+import Tasks from '../pages/Tasks';
 import NotFound from '../components/NotFound';
 import Spinner from '../components/Loaders/Spinner';
+import AddTask from '../components/AddNew/AddTask';
 
 const API_URL = 'https://autovaq.herokuapp.com';
 
@@ -82,6 +84,18 @@ function ContentRoute({ setIsLoading, isLoading }) {
         // Set allowed routes based on the user's role
         switch (res.data.role) {
           case 'Employee':
+            setAllowedRoutes([
+              '/',
+              '/home',
+              '/profile',
+              '/repair_app',
+              '/computer_equip',
+              '/tasks',
+              '/add_task',
+              '/add_comp_eq',
+              '/add_rep_eq',  
+            ]);
+            break;
           case 'SysAdmin':
             setAllowedRoutes([
               '/',
@@ -89,6 +103,7 @@ function ContentRoute({ setIsLoading, isLoading }) {
               '/profile',
               '/repair_app',
               '/computer_equip',
+              '/performance_chart',
               '/add_comp_eq',
               '/add_rep_eq',
             ]);
@@ -114,8 +129,10 @@ function ContentRoute({ setIsLoading, isLoading }) {
               '/add_comp_eq',
               '/add_rep_eq',
               '/add_job',
+              '/add_task',
               '/register',
               '/performance_chart',
+              '/tasks',
             ]);
             break;
           default:
@@ -162,10 +179,12 @@ function ContentRoute({ setIsLoading, isLoading }) {
                   <Route path="/add_comp_eq" element={<AddCompEq />}></Route>
                   <Route path="/add_rep_eq" element={<AddRepairEq />}></Route>
                   <Route path="/add_job" element={<AddJob />}></Route>
+                  <Route path="/add_task" element={<AddTask />}></Route>
                   <Route
                     path="/performance_chart"
                     element={<PerformanceChart />}
                   ></Route>
+                  <Route path="/tasks" element={<Tasks />}></Route>
                 </Routes>
               </Layout>
             </Layout>

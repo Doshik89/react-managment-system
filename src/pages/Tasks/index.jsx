@@ -6,30 +6,30 @@ import {
   Space,
   Form,
   Input,
-  Select,
   Tag,
+  Select,
   Modal,
-  notification,
   Skeleton,
 } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
-function CompEquip() {
-  const [username, setUsername] = useState('');
-  const [dataSource, setDataSource] = useState([]);
+function EmpTask() {
+  const [role, setRole] = useState('loading');
   const [dataFetched, setDataFetched] = useState(false);
+  const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRowKey, setEditRowKey] = useState('');
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
   const token = localStorage.getItem('token');
 
   const fetchRole = useCallback(async () => {
@@ -39,7 +39,7 @@ function CompEquip() {
           Authorization: `Token ${token}`,
         },
       });
-      setUsername(res.data.role);
+      setRole(res.data.role);
     } catch (error) {
       console.error(error);
     }
@@ -47,17 +47,22 @@ function CompEquip() {
 
   useEffect(() => {
     fetchRole(token);
-  }, [token, fetchRole, username]);
+  }, [token, fetchRole, role]);
+
+  useEffect(() => {
+    fetchRole().then(() => {
+      setDataFetched(true);
+    });
+  }, [fetchRole]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
     axios
-      .get('https://autovaq.herokuapp.com/api/computer/', {
+      .get('https://autovaq.herokuapp.com/api/task/', {
         headers: {
           Authorization: `Token ${token}`,
         },
-        mode: 'no-cors',
       })
       .then(res => {
         setDataSource(res.data.sort((a, b) => a.id - b.id));
@@ -69,16 +74,10 @@ function CompEquip() {
       });
   }, []);
 
-  useEffect(() => {
-    fetchRole().then(() => {
-      setDataFetched(true);
-    });
-  }, [fetchRole]);
-
   const handleDelete = value => {
     const token = localStorage.getItem('token');
     axios
-      .delete(`https://autovaq.herokuapp.com/api/computer/${value.id}/`, {
+      .delete(`https://autovaq.herokuapp.com/api/task/${value.id}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -95,7 +94,7 @@ function CompEquip() {
   const handleSearch = value => {
     setSearchText(value);
     const newData = dataSource.filter(item => {
-      const name = `${item.device_name} ${item.arrival_date} ${item.deletion_date}`;
+      const name = `${item.reg_date} ${item.tsk_dedl_date} ${item.id}`;
       return name.toLowerCase().includes(value.toLowerCase());
     });
     setFilteredData(newData);
@@ -139,7 +138,7 @@ function CompEquip() {
         const token = localStorage.getItem('token');
         axios
           .put(
-            `https://autovaq.herokuapp.com/api/computer/${item.id}/`,
+            `https://autovaq.herokuapp.com/api/task/${item.id}/`,
             {
               ...row,
             },
@@ -172,95 +171,89 @@ function CompEquip() {
   const edit = record => {
     form.setFieldsValue({
       ...record,
+      emp_id: record.emp_id || '',
     });
     setEditRowKey(record.id);
   };
 
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       key: 'id',
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Employee',
-      dataIndex: 'owner',
+      title: 'Employee ID',
+      dataIndex: 'emp_id',
+      editTable: false,
       key: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Equipment name',
-      dataIndex: 'device_name',
+      title: 'HR ID',
+      dataIndex: 'hr_id',
+      editTable: false,
       key: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
-      title: 'Arrival date',
-      dataIndex: 'arrival_date',
-      key: 'id',
-      render: date =>
-        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
-    },
-    {
-      title: 'Date of deletion',
-      dataIndex: 'deletion_date',
+      title: 'Start Date',
+      dataIndex: 'reg_date',
+      editTable: false,
       key: 'id',
       render: date =>
         date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
     },
     {
-      title: 'Note',
-      dataIndex: 'notes',
+      title: 'End Date',
+      dataIndex: 'tsk_dedl_date',
+      editTable: false,
+      key: 'id',
+      render: date =>
+        date ? new Date(date).toLocaleDateString('en-GB') : 'N/A',
+    },
+    {
+      title: 'Task',
+      dataIndex: 'tsk_desc',
+      editTable: true,
       key: 'id',
     },
     {
       title: 'Status',
-      dataIndex: 'condition',
+      dataIndex: 'tsk_status',
       key: 'id',
       align: 'center',
       render: (text, record) => {
         const editable = isEditing(record);
         let tagColor = '';
         switch (text) {
-          case 'Снято с учета':
-            tagColor = 'blue';
+          case 'Невыполнено':
+            tagColor = 'Red';
             break;
-          case 'Свободное':
-            tagColor = 'orange';
-            break;
-          case 'На рабочем месте':
-            tagColor = 'green';
-            break;
-          case 'В ремонте':
-            tagColor = 'purple';
+          case 'Выполнено':
+            tagColor = 'Green';
             break;
           default:
             tagColor = 'gray';
         }
         return editable ? (
           <Form.Item
-            name="condition"
+            name="tsk_status"
             style={{ margin: 0 }}
             rules={[{ required: true, message: 'Please select a status' }]}
           >
             <Select>
-              <Select.Option value="Снято с учета">Снято с учета</Select.Option>
-              <Select.Option value="Свободное">Свободное</Select.Option>
-              <Select.Option value="На рабочем месте">
-                На рабочем месте
-              </Select.Option>
-              <Select.Option value="В ремонте">В ремонте</Select.Option>
+              <Select.Option value="Невыполнено">Невыполнено</Select.Option>
+              <Select.Option value="Выполнено">Выполнено</Select.Option>
             </Select>
           </Form.Item>
         ) : (
           <Tag color={tagColor}>
-            {text.includes('Снято с учета')
-              ? 'Снято с учета'
-              : text.includes('Свободное')
-              ? 'Свободное'
-              : text.includes('На рабочем месте')
-              ? 'На рабочем месте'
-              : text.includes('В ремонте')
-              ? 'В ремонте'
+            {text.includes('Невыполнено')
+              ? 'Невыполнено'
+              : text.includes('Выполнено')
+              ? 'Выполнено'
               : ''}
           </Tag>
         );
@@ -274,7 +267,7 @@ function CompEquip() {
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);
-        const isEmployee = username === 'Employee';
+        const isEmployee = role === 'Employee';
 
         return dataSource.length >= 1 ? (
           <Space key={record.id}>
@@ -327,7 +320,7 @@ function CompEquip() {
             ) : (
               <Button
                 type="primary"
-                style={{ background: '#fff', maxWidth: '50px' }}
+                style={{ background: '#808080', maxWidth: '50px' }}
               >
                 {'\u00A0'}
                 {'\u00A0'}
@@ -401,26 +394,29 @@ function CompEquip() {
               style={{ marginBottom: 20 }}
             >
               <h1 style={{ marginLeft: 20, marginTop: 30 }}>
-                Computer equipment
+                Employee Work Tasks
               </h1>
               <Space>
-                <Button
-                  style={{
-                    marginTop: 15,
-                    backgroundColor: '#00B0FF',
-                    color: '#fff',
-                    width: 150,
-                    height: 40,
-                    borderRadius: 5,
-                    textTransform: 'uppercase',
-                    fontWeight: 'bold',
-                    letterSpacing: 1,
-                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  }}
-                  onClick={() => navigate('/add_comp_eq')}
-                >
-                  Add New
-                </Button>
+                {role !== 'Employee' &&
+                  role !== 'loading' && ( // Add role !== 'loading' check
+                    <Button
+                      style={{
+                        marginTop: 15,
+                        backgroundColor: '#00B0FF',
+                        color: '#fff',
+                        width: 150,
+                        height: 40,
+                        borderRadius: 5,
+                        textTransform: 'uppercase',
+                        fontWeight: 'bold',
+                        letterSpacing: 1,
+                        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                      }}
+                      onClick={() => navigate('/add_task')}
+                    >
+                      Add New
+                    </Button>
+                  )}
                 <Button
                   style={{
                     marginTop: 15,
@@ -476,4 +472,4 @@ function CompEquip() {
   );
 }
 
-export default CompEquip;
+export default EmpTask;

@@ -37,6 +37,7 @@ function Register() {
     <Layout>
       <Layout>
         <Content className="site-layout-background">
+          <h1 className="title-shadow">Registration</h1>
           <div className="container  d-flex justify-content-center vertical-center">
             <div className="form-shadow">
               <Form

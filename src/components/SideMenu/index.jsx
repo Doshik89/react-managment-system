@@ -6,6 +6,7 @@ import {
   UserAddOutlined,
   ReadOutlined,
   BarChartOutlined,
+  FileTextOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Avatar } from 'antd';
 import { useState, useMemo, useEffect } from 'react';
@@ -91,16 +92,29 @@ const SideMenu = () => {
       getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
       getItem('Employee', '/employees', <TeamOutlined />),
       getItem('Job catalogue', '/job_catalogue', <ReadOutlined />),
-      getItem('Registration', '/register', <UserAddOutlined />),
       getItem('Performance Graph', '/performance_chart', <BarChartOutlined />),
+      getItem('Tasks', '/tasks', <FileTextOutlined />),
+      getItem('Registration', '/register', <UserAddOutlined />),
     ];
     if (userRole === '') {
       return [];
-    } else if (userRole === 'Employee' || userRole === 'SysAdmin') {
+    } else if (userRole === 'Employee') {
       return [
         getItem('Home', '/', <HomeOutlined />),
         getItem('Repair requests', '/repair_app', <FormOutlined />),
         getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
+        getItem('Tasks', '/tasks', <FileTextOutlined />),
+      ];
+    } else if (userRole === 'SysAdmin') {
+      return [
+        getItem('Home', '/', <HomeOutlined />),
+        getItem('Repair requests', '/repair_app', <FormOutlined />),
+        getItem('Computer equipment', '/computer_equip', <DesktopOutlined />),
+        getItem(
+          'Performance Graph',
+          '/performance_chart',
+          <BarChartOutlined />
+        ),
       ];
     } else if (userRole === 'HR') {
       return [
