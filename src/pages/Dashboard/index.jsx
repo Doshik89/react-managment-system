@@ -54,8 +54,8 @@ const Dashboard = () => {
       <Layout>
         <Content className="site-layout-background">
           <div className="welcome">
-            <h1>Hello, {username}!</h1>
-            <p>You have successfully logged in to your account.</p>
+            <h1>Welcome back, {username}!</h1>
+            <p>You have successfully logged in to your account!</p>
             <p>What would you like to do today?</p>
             <div
               className="mainPNG"
