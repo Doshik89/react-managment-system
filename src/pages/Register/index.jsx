@@ -93,7 +93,7 @@ function Register() {
                       message: 'Please enter the name',
                     },
                     { whitespace: true },
-                    { min: 3 },
+                    { min: 1 },
                   ]}
                   hasFeedback
                 >
@@ -119,7 +119,7 @@ function Register() {
                       message: 'Please enter the last name',
                     },
                     { whitespace: true },
-                    { min: 3 },
+                    { min: 1 },
                   ]}
                   hasFeedback
                 >
@@ -145,7 +145,7 @@ function Register() {
                       message: 'Please enter the last name',
                     },
                     { whitespace: true },
-                    { min: 3 },
+                    { min: 1 },
                   ]}
                   hasFeedback
                 >
@@ -160,6 +160,67 @@ function Register() {
                       },
                     }}
                     placeholder="Enter your last name"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter your email',
+                    },
+                    {
+                      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: 'Please enter a valid email address',
+                    },
+                    { whitespace: true },
+                    { min: 5 },
+                  ]}
+                  hasFeedback
+                >
+                  <Input
+                    style={{
+                      fontWeight: 'bold',
+                      borderRadius: 5,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:focus': {
+                        borderColor: '#FFA100',
+                        boxShadow: '0 0 10px #FFA100',
+                      },
+                    }}
+                    placeholder="Enter your email"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="phone"
+                  label="Phone"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter your phone number',
+                    },
+                    { whitespace: true },
+                    {
+                      pattern: /^\+\d{11}$/,
+                      message:
+                        'Please enter a valid phone number (e.g., +77474410000)',
+                    },
+                    { min: 11 },
+                  ]}
+                  hasFeedback
+                >
+                  <Input
+                    style={{
+                      fontWeight: 'bold',
+                      borderRadius: 5,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:focus': {
+                        borderColor: '#FFA100',
+                        boxShadow: '0 0 10px #FFA100',
+                      },
+                    }}
+                    placeholder="Enter your phone number"
                   />
                 </Form.Item>
                 <Form.Item
