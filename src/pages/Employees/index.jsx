@@ -175,31 +175,35 @@ function Employee() {
     {
       title: 'Position',
       dataIndex: 'position',
-      key: 'id',
+      key: 'position',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'id',
+      key: 'name',
       editTable: true,
     },
     {
       title: 'Surname',
       dataIndex: 'surname',
-      key: 'id',
+      key: 'surname',
       editTable: true,
     },
     {
       title: 'Lastname',
       dataIndex: 'lastname',
-      key: 'id',
+      key: 'lastname',
       editTable: true,
     },
     {
       title: 'Workplace',
       dataIndex: 'workplace_id',
-      key: 'id',
+      key: 'workplace',
       render: (_, record) => {
+        const workplace = workplaces.find(
+          workplace => workplace.id === record.workplace_id
+        );
+        const workplaceName = workplace ? workplace.workplace_name : 'N/A';
         return isEditing(record) ? (
           <Form.Item
             name="workplace"
@@ -217,11 +221,9 @@ function Employee() {
               ))}
             </Select>
           </Form.Item>
-        ) : record.workplace_id !== null ? (
-          record.workplace
         ) : record.workplace_id !== null &&
           record.workplace_id !== undefined ? (
-          record.workplace
+          workplaceName
         ) : (
           'N/A'
         );
@@ -230,7 +232,7 @@ function Employee() {
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'id',
+      key: 'action',
       align: 'center',
       render: (_, record) => {
         const editable = isEditing(record);

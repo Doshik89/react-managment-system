@@ -26,18 +26,22 @@ const ColumnDiagram = () => {
             Authorization: `Token ${token}`,
           },
         });
-        const data = await response.json();
+        const responseData = await response.json();
 
-        const employeeNames = Object.values(data).map(entry => entry.name);
-        const reqCounts = Object.values(data).map(entry => entry.req_count);
-        const reqCompleteCounts = Object.values(data).map(
+        const filteredData = Object.values(responseData).filter(
+          entry => entry.req_count < 50
+        );
+
+        const employeeNames = filteredData.map(entry => entry.name);
+        const reqCounts = filteredData.map(entry => entry.req_count);
+        const reqCompleteCounts = filteredData.map(
           entry => entry.req_complete_count
         );
-        const percentOfCompletes = Object.values(data).map(
+        const percentOfCompletes = filteredData.map(
           entry => entry.percent_of_complete
         );
-        const avgTimes = Object.values(data).map(entry => entry.avg_time);
-        const efficiencies = Object.values(data).map(entry => entry.eff);
+        const avgTimes = filteredData.map(entry => entry.avg_time);
+        const efficiencies = filteredData.map(entry => entry.eff);
 
         Chart.register(
           CategoryScale,
@@ -55,8 +59,8 @@ const ColumnDiagram = () => {
             {
               label: 'Number of requests',
               data: reqCounts,
-              borderColor: 'rgba(255, 99, 132, 1)',
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 0, 255, 1)',
+              backgroundColor: 'rgba(255, 0, 255, 0.2)',
               fill: true,
             },
             {
@@ -69,15 +73,15 @@ const ColumnDiagram = () => {
             {
               label: 'Percentage of completed',
               data: percentOfCompletes,
-              borderColor: 'rgba(255, 206, 86, 1)',
-              backgroundColor: 'rgba(255, 206, 86, 0.2)',
+              borderColor: 'rgba(0, 255, 0, 1)',
+              backgroundColor: 'rgba(0, 255, 0, 0.2)',
               fill: true,
             },
             {
               label: 'Average execution time',
               data: avgTimes,
-              borderColor: 'rgba(75, 192, 192, 1)',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgb(255, 0, 0, 1)',
+              backgroundColor: 'rgba(255, 0, 0, 0.2)',
               fill: true,
             },
             {
