@@ -71,8 +71,9 @@ function ContentRoute({ setIsLoading, isLoading }) {
   const location = useLocation();
   const [allowedRoutes, setAllowedRoutes] = useState([]);
 
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const fetchRole = async () => {
       try {
         const res = await axios.get(`${API_URL}/view-role/`, {
@@ -93,7 +94,7 @@ function ContentRoute({ setIsLoading, isLoading }) {
               '/tasks',
               '/add_task',
               '/add_comp_eq',
-              '/add_rep_eq',  
+              '/add_rep_eq',
             ]);
             break;
           case 'SysAdmin':
@@ -112,6 +113,7 @@ function ContentRoute({ setIsLoading, isLoading }) {
             setAllowedRoutes([
               '/',
               '/home',
+              '/profile',
               '/register',
               '/job_catalogue',
               '/add_job',
@@ -147,7 +149,7 @@ function ContentRoute({ setIsLoading, isLoading }) {
     };
 
     fetchRole();
-  }, [setIsLoading]);
+  }, [setIsLoading, token]);
 
   if (isLoading) {
     return <Spinner />;
