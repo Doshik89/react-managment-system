@@ -201,14 +201,47 @@ const UserProfile = () => {
                 <Form.Item label="Position" name="position">
                   <span>{user.position || 'N/A'}</span>
                 </Form.Item>
-                <Form.Item label="Phone" name="phone">
+                <Form.Item
+                  label="Phone"
+                  name="phone"
+                  rules={[
+                    {
+                      required: false,
+                      message: 'Please enter your phone number',
+                    },
+                    { whitespace: true },
+                    {
+                      pattern: /^\+\d{11}$/,
+                      message:
+                        'Please enter a valid phone number (e.g., +77474410000)',
+                    },
+                    { min: 11 },
+                  ]}
+                  hasFeedback
+                >
                   {editMode ? (
                     <Input placeholder="Enter your phone" />
                   ) : (
                     <span>{user.phone || 'N/A'}</span>
                   )}
                 </Form.Item>
-                <Form.Item label="Email" name="email">
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    {
+                      required: false,
+                      message: 'Please enter your email',
+                    },
+                    {
+                      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: 'Please enter a valid email address',
+                    },
+                    { whitespace: true },
+                    { min: 5 },
+                  ]}
+                  hasFeedback
+                >
                   {editMode ? (
                     <Input placeholder="Enter your email" />
                   ) : (
