@@ -52,12 +52,17 @@ function CompEquip() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
+
+    const url =
+      username === 'Admin'
+        ? 'https://autovaq.herokuapp.com/api/computer/'
+        : 'https://autovaq.herokuapp.com/mycomp/';
+
     axios
-      .get('https://autovaq.herokuapp.com/api/computer/', {
+      .get(url, {
         headers: {
           Authorization: `Token ${token}`,
         },
-        mode: 'no-cors',
       })
       .then(res => {
         setDataSource(res.data.sort((a, b) => a.id - b.id));
@@ -67,7 +72,7 @@ function CompEquip() {
         console.log(err);
         setLoading(false);
       });
-  }, []);
+  }, [token, username]);
 
   useEffect(() => {
     fetchRole().then(() => {

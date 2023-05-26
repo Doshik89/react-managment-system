@@ -88,9 +88,9 @@ function AddTask() {
         form.resetFields();
         notification.success({
           message: 'Success',
-          description: 'Employee added successfully.',
+          description: 'Task added successfully.',
         });
-        navigate('/repair_app');
+        navigate('/tasks');
       } catch (err) {
         console.log(err);
         notification.error({
