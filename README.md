@@ -1,7 +1,7 @@
 # InControl
 
 
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 This diploma project focuses on the development of an advanced, crossplatform application intended for the automation of enterprise management
 processes. The targeted beneficiaries are small to medium-sized businesses
 operating within Kazakhstan, specifically those seeking an efficient way to oversee
