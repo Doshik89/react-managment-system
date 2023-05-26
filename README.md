@@ -1,5 +1,16 @@
 # InControl
 
+
+## ------------------------------- ------------------------------- -------------------------------
+This diploma project focuses on the development of an advanced, crossplatform application intended for the automation of enterprise management
+processes. The targeted beneficiaries are small to medium-sized businesses
+operating within Kazakhstan, specifically those seeking an efficient way to oversee
+their employee data and equipment inventory.
+The objectives include developing a multiplatform system, creating a userfriendly interface, incorporating a gadget repair management system, testing the
+application to identify and correct bugs, and implementing it in an enterprise
+setting.
+
+
 ## Available Scripts
 
 In the project directory, you can run:
