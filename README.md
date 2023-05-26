@@ -1,5 +1,3 @@
-# InControl
-
 ![logo](https://github.com/sanzhar89/react-managment-system/assets/77663475/380ea603-cb5c-4b22-9743-fd255a5e5bfc)
 
 
