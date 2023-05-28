@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'antd';
 import {
   Chart,
   CategoryScale,
@@ -115,45 +116,52 @@ const ColumnDiagram = () => {
   return (
     <div className="chart-container">
       {data ? (
-        <Bar
-          key={data}
-          data={data}
-          options={{
-            scales: {
-              x: {
-                type: 'category',
-                offset: true,
-                title: {
-                  display: true,
-                  text: 'Employee Names',
-                  color: 'black',
+        <>
+          <Bar
+            key={data}
+            data={data}
+            options={{
+              scales: {
+                x: {
+                  type: 'category',
+                  offset: true,
+                  title: {
+                    display: true,
+                    text: 'Employee Names',
+                    color: 'black',
+                  },
                 },
-              },
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Values',
-                  color: 'black',
-                },
-                ticks: {
-                  callback: value => `${value}`,
-                },
-              },
-            },
-            plugins: {
-              filler: {
-                propagate: false,
-                tooltip: {
-                  enabled: true,
-                  callbacks: {
-                    label: labelCallback,
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Values',
+                    color: 'black',
+                  },
+                  ticks: {
+                    callback: value => `${value}`,
                   },
                 },
               },
-            },
-          }}
-        />
+              plugins: {
+                filler: {
+                  propagate: false,
+                  tooltip: {
+                    enabled: true,
+                    callbacks: {
+                      label: labelCallback,
+                    },
+                  },
+                },
+              },
+            }}
+          />
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <a href="https://autovaq.herokuapp.com/dwn" download>
+              <Button type="primary">Export</Button>
+            </a>
+          </div>
+        </>
       ) : (
         <Skeleton />
       )}
