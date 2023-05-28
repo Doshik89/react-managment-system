@@ -110,7 +110,7 @@ const ColumnDiagram = () => {
       return `${label}: ${value}`;
     }
 
-    return 'Gay';
+    return '';
   };
 
   return (

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Layout, Form, Input, Button, notification, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './addNew.css';
+import { DatePicker } from 'antd';
+import moment from 'moment';
 
 const { useForm } = Form;
 
@@ -11,6 +13,7 @@ function AddTask() {
   const [dataSource, setDataSource] = useState([]);
   const [owner, setOwner] = useState([]);
   const [admin, setAdmin] = useState([]);
+  const [deadline, setDeadline] = useState(null);
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
@@ -72,6 +75,7 @@ function AddTask() {
 
         const data = {
           ...values,
+          tsk_dedl_date: deadline,
         };
 
         const token = localStorage.getItem('token');
@@ -99,7 +103,7 @@ function AddTask() {
         });
       }
     },
-    [form, dataSource, navigate]
+    [form, dataSource, navigate, deadline]
   );
 
   return (
@@ -148,6 +152,21 @@ function AddTask() {
               placeholder="Enter a note"
               style={{ height: 50 }}
               className="inputField"
+            />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            className="formLabel"
+            name="tsk_dedl_date"
+            label="Deadline"
+          >
+            <DatePicker
+              className="inputField"
+              value={deadline ? moment(deadline) : null}
+              onChange={date =>
+                setDeadline(date ? date.format('YYYY-MM-DD') : null)
+              }
             />
           </Form.Item>
           <Form.Item
