@@ -54,7 +54,7 @@ function CompEquip() {
     setLoading(true);
 
     const url =
-      username === 'Admin'
+      username === 'Admin' || username === 'SysAdmin'
         ? 'https://autovaq.herokuapp.com/api/computer/'
         : 'https://autovaq.herokuapp.com/mycomp/';
 
