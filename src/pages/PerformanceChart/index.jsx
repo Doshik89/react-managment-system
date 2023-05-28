@@ -115,6 +115,31 @@ const ColumnDiagram = () => {
 
   return (
     <div className="chart-container">
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: '1rem',
+        }}
+      >
+        <a href="https://autovaq.herokuapp.com/dwn" download>
+          <Button
+            style={{
+              backgroundColor: '#00B0FF',
+              color: '#fff',
+              width: 150,
+              height: 40,
+              borderRadius: 5,
+              textTransform: 'uppercase',
+              fontWeight: 'bold',
+              letterSpacing: 1,
+              boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            }}
+            type="primary"
+          >
+            Export
+          </Button>
+        </a>
+      </div>
       {data ? (
         <>
           <Bar
@@ -156,11 +181,6 @@ const ColumnDiagram = () => {
               },
             }}
           />
-          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-            <a href="https://autovaq.herokuapp.com/dwn" download>
-              <Button type="primary">Export</Button>
-            </a>
-          </div>
         </>
       ) : (
         <Skeleton />
