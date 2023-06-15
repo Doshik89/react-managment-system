@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/react-managment-system/static/css/main.7f586e21.css",
+    "main.js": "/react-managment-system/static/js/main.16ef08fb.js",
+    "static/media/mainPNG1.png": "/react-managment-system/static/media/mainPNG1.1133747c786e343d48c7.png",
+    "static/media/logBG.png": "/react-managment-system/static/media/logBG.936d08601280ad5c89a3.png",
+    "static/media/mainPNG5.png": "/react-managment-system/static/media/mainPNG5.44664c52972a5b898e17.png",
+    "static/media/notfound1.png": "/react-managment-system/static/media/notfound1.884dea0353388796b183.png",
+    "static/media/notfound4.png": "/react-managment-system/static/media/notfound4.a0ef4b8b130e96f1b448.png",
+    "static/media/mainPNG4.png": "/react-managment-system/static/media/mainPNG4.82457c26d5388aa31b43.png",
+    "static/media/notfound3.png": "/react-managment-system/static/media/notfound3.70042c33224523edc6db.png",
+    "static/media/notfound2.png": "/react-managment-system/static/media/notfound2.3bc1fc7bb2f42b34fc38.png",
+    "static/media/mainPNG2.png": "/react-managment-system/static/media/mainPNG2.b275a2ba3d42ef1c89b6.png",
+    "static/media/notfound5.png": "/react-managment-system/static/media/notfound5.370c22fa4bc112c380e2.png",
+    "static/media/mainPNG3.png": "/react-managment-system/static/media/mainPNG3.c6b3f19e4a8cef118bd1.png",
+    "static/media/logo.png": "/react-managment-system/static/media/logo.190015a0f3593e658006.png",
+    "index.html": "/react-managment-system/index.html",
+    "main.7f586e21.css.map": "/react-managment-system/static/css/main.7f586e21.css.map",
+    "main.16ef08fb.js.map": "/react-managment-system/static/js/main.16ef08fb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7f586e21.css",
+    "static/js/main.16ef08fb.js"
+  ]
+}
