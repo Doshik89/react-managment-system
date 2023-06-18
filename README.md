@@ -19,4 +19,4 @@ To launch this project, follow the link:
 
 ### https://sanzh-incontrol.surge.sh/
 
-### If it returns "page not found", follow the same link again or delete the words after in the link "/"
+### `If it returns "page not found", follow the same link again or delete the words after in the link "/"`
